@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="haopaiarr">
+     <item>大型汽车</item>  
+    <item>小型汽车</item>
+    </string-array>
+</resources>
