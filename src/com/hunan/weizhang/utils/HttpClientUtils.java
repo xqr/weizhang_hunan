@@ -71,7 +71,7 @@ public class HttpClientUtils {
      * @param url 请求url
      * @return
      */
-    public static String getResponse(String url) {
+    public static String getResponse(String url, Map<String, String> headerMap) {
         try {
             HttpClient httpclient = new DefaultHttpClient();
             URI uri = new URI(url);
@@ -79,6 +79,11 @@ public class HttpClientUtils {
             httpclient.getParams().setParameter(ClientPNames.COOKIE_POLICY,
                     CookiePolicy.BROWSER_COMPATIBILITY);
             httpclient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 60000); 
+            if (headerMap != null) {
+                for (String key : headerMap.keySet()) {
+                    httpGet.setHeader(key, headerMap.get(key));
+                }
+            }
             HttpResponse response = httpclient.execute(httpGet);
             if (response == null) {
                 return null;

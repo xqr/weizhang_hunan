@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.AsyncTask;
@@ -27,7 +26,7 @@ import com.hunan.weizhang.model.CarInfo;
 import com.hunan.weizhang.model.VerificationCode;
 import com.hunan.weizhang.qrcode.QrCodeExample;
 
-public class MainActivity extends Activity {
+public class MainActivity extends BaseActivity {
     
     private String defaultChepai = "湘"; 
     
@@ -61,7 +60,17 @@ public class MainActivity extends Activity {
         // 标题
         TextView txtTitle = (TextView) findViewById(R.id.txtTitle);
         txtTitle.setText("违章查询");
-
+        
+        // 返回按钮
+        Button btnBack = (Button) findViewById(R.id.btnBack);
+        btnBack.setVisibility(View.VISIBLE);
+        btnBack.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        
         // 选择省份缩写
         haopai_lx = (Spinner) findViewById(R.id.haopai_lx);
         chepai_number = (EditText) findViewById(R.id.chepai_number);
@@ -88,7 +97,11 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClass(MainActivity.this, ShortNameList.class);
-                intent.putExtra("select_short_name", short_name.getText());
+                String shortNameStr = short_name.getText().toString().trim();
+                if (shortNameStr == null || shortNameStr.isEmpty()) {
+                    shortNameStr = "湘";
+                }
+                intent.putExtra("select_short_name", shortNameStr);
                 startActivityForResult(intent, 0);
             }
         });

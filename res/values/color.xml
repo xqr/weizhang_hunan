@@ -9,5 +9,12 @@
 	<color name="csy_blue_on">#ff0a64aa</color>	
     <color name="csy_label">#ff969696</color>
     <color name="csy_text">#ff555555</color>
-    <color name="csy_hint">#ffc6c6c6</color>         
+    <color name="csy_hint">#ffc6c6c6</color> 
+    
+    <color name="csy_weather_a">#cf00FF00</color>
+    <color name="csy_weather_b">#cf00A7D1</color>
+    <color name="csy_weather_c">#cf777730</color>
+    <color name="csy_weather_d">#cfFF4E00</color>
+    <color name="csy_weather_e">#cfFF0000</color>
+    <color name="csy_weather_f">#cf003333</color>
 </resources>

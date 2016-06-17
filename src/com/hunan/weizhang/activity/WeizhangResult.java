@@ -1,6 +1,7 @@
 package com.hunan.weizhang.activity;
 
-import android.app.Activity;
+import java.util.Date;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,9 +17,10 @@ import com.hunan.weizhang.adapter.WeizhangResponseAdapter;
 import com.hunan.weizhang.api.client.WeizhangApiClient;
 import com.hunan.weizhang.model.CarInfo;
 import com.hunan.weizhang.model.VerificationCode;
-import com.hunan.weizhang.model.WeizhangInfo;
 import com.hunan.weizhang.model.WeizhangMessage;
 import com.hunan.weizhang.qrcode.QrCodeExample;
+import com.hunan.weizhang.service.WeizhangHistoryService;
+import com.hunan.weizhang.service.WzHunanService;
 
 /**
  * title：查询违章信息
@@ -26,12 +28,14 @@ import com.hunan.weizhang.qrcode.QrCodeExample;
  * @author paul
  * 
  */
-public class WeizhangResult extends Activity {
+public class WeizhangResult extends BaseActivity {
     final Handler cwjHandler = new Handler();
     WeizhangMessage info = null;
     
     private View popLoader;
 
+    private WeizhangHistoryService weizhangHistoryService;
+    
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -53,6 +57,8 @@ public class WeizhangResult extends Activity {
             }
         });
 
+        weizhangHistoryService = new WeizhangHistoryService(WeizhangResult.this);
+        
         popLoader = (View) findViewById(R.id.popLoader);
         popLoader.setVisibility(View.VISIBLE);
 
@@ -81,21 +87,39 @@ public class WeizhangResult extends Activity {
             public void run() {
                 try {
                     // 这里写入子线程需要做的工作
+                    // 优先从历史记录查询
+                    WeizhangMessage weizhangMessage = weizhangHistoryService.getHistory(car);
+                    if(weizhangMessage != null 
+                            && (weizhangMessage.getSearchTimestamp() + 1000 * 60 * 60 * 8) >= new Date().getTime()) {
+                        info = weizhangMessage;
+                        cwjHandler.post(mUpdateResults); // 高速UI线程可以更新结果了
+                        return;
+                    }
+                    
+                    // 从业务服务器获取信息
+                    WzHunanService.queryWeizhang(car, telephone);
+                    
+                    // 校验验证码正确性
                     VerificationCode newVerificationCode = verificationCode;
                     if (newVerificationCode == null 
                             || newVerificationCode.getRandCode() == null) {
                         newVerificationCode = getVerificationCode();
                     }
                     
-                    info = WeizhangApiClient.toQueryVioltionByCarAction(car, newVerificationCode);
+                    weizhangMessage = WeizhangApiClient.toQueryVioltionByCarAction(car, newVerificationCode);
                     //  验证码错误自动重试1次
-                    if (info != null && info.getMessage().equals("图片验证码有误")) {
+                    if (weizhangMessage != null && weizhangMessage.getMessage().equals("图片验证码有误")) {
                         newVerificationCode = getVerificationCode();
-                        info = WeizhangApiClient.toQueryVioltionByCarAction(car, newVerificationCode);
+                        weizhangMessage = WeizhangApiClient.toQueryVioltionByCarAction(car, newVerificationCode);
                     }
+                    // 查询成功，缓存结果
+                    if (weizhangMessage != null && weizhangMessage.getCode().equals("1")) {
+                        weizhangHistoryService.appendHistory(weizhangMessage);
+                    }
+                    info = weizhangMessage;
                     cwjHandler.post(mUpdateResults); // 高速UI线程可以更新结果了
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    
                 }
             }
         }.start();
@@ -154,20 +178,8 @@ public class WeizhangResult extends Activity {
             result_title.setVisibility(View.VISIBLE);
             result_list.setVisibility(View.VISIBLE);
 
-//            int scores = 0;
-//            int fakuan = 0;
-//            int weichuali = 0;
-//            for (WeizhangInfo weizhang : info.getData()) {
-//                try {
-//                    scores = scores + Integer.parseInt(weizhang.getWfjfs());
-//                    fakuan = fakuan + Integer.parseInt(weizhang.getFkje());
-//                    if (weizhang.getZt().equals("0")) {
-//                        weichuali++;
-//                    }
-//                } catch (Exception e) {
-//                }
-//            }
-            result_title.setText("共违章" + info.getUntreatedCount() + "次, 计" + info.getTotalScores() +"分, 罚" + info.getTotalFkje() + "元");
+            result_title.setText("共违章" + info.getUntreatedCount() + "次, 计" 
+                            + info.getTotalScores() +"分, 罚" + info.getTotalFkje() + "元");
             
             WeizhangResponseAdapter mAdapter = new WeizhangResponseAdapter(
                     this, info.getData());

@@ -4,7 +4,6 @@ import com.sprzny.hunan.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -21,15 +20,13 @@ public class ShortNameList extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //获取传过来的城市
-        Bundle bundle = getIntent().getExtras();
-        final String short_name = bundle.getString("select_short_name");
-        Log.d("select_short_name...", short_name);
+//        //获取传过来的城市
+//        Bundle bundle = getIntent().getExtras();
+//        final String short_name = bundle.getString("select_short_name");
             
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.csy_activity_shortname);
-        //getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,R.layout.csy_titlebar);
         
         //标题
         TextView txtTitle = (TextView) findViewById(R.id.txtTitle);

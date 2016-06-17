@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/csy_bg_body"
     tools:context="com.hunan.weizhang.activity.IndexActivity" >
 
     <RelativeLayout
@@ -26,8 +27,8 @@
             android:paddingTop="4dp" >
 
             <ImageView
-                android:layout_width="13dp"
-                android:layout_height="13dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:src="@drawable/dingwei" />
 
@@ -35,6 +36,7 @@
                 android:id="@+id/dingwei_city"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="18sp"
                 android:text="长沙"
                 android:textColor="@android:color/white" />
         </LinearLayout>
@@ -77,7 +79,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="6dp"
-                    android:src="@drawable/dabaoyu" />
+                    android:src="@drawable/w_dabaoyu" />
 
                 <TextView
                     android:id="@+id/weather_wenzi"
@@ -118,7 +120,7 @@
                 android:paddingBottom="6dp"
                 android:paddingLeft="6dp" >
 
-                <TextView
+                <TextView android:id="@+id/xc_index"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -128,7 +130,7 @@
                     android:textColor="@android:color/white"
                     android:textSize="16sp" />
 
-                <TextView
+                <TextView android:id="@+id/xc_details"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:lineSpacingMultiplier="1.4"
@@ -139,7 +141,26 @@
         </RelativeLayout>
     </RelativeLayout>
     
+    <GridView 
+            android:id="@+id/icon_gview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:numColumns="4"    
+            android:stretchMode="columnWidth"
+            android:listSelector="@android:color/transparent"
+            android:background="@android:color/white"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
+        
+    </GridView>
     
-    
+    <!-- 查询历史列表 -->
+    <ListView
+        android:id="@+id/history_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:divider="#C0C0C0"   
+        android:dividerHeight="1px"/>
     
 </LinearLayout>

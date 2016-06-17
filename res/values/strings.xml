@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">全国违章查询助手</string>
-    <string name="csy_form_tip">目前仅支持小型汽车查询</string>
+    <string name="app_name">湖南违章查询</string>
     <string name="csy_btn_query">开始查询</string>
     <string name="csy_cxdz_lab">车牌类型</string>
     <string name="csy_chepai_lab">车牌号</string>
