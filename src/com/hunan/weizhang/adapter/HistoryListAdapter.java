@@ -51,19 +51,15 @@ public class HistoryListAdapter extends BaseAdapter {
         
         // 绑定数据
         chepaiView.setText(weizhangMessage.getCarInfo().getChepaiNo());
-        if (weizhangMessage.getData() == null 
-                || weizhangMessage.getData().size() == 0) {
-            // 无违章记录
-            weizhangmessageView.setVisibility(View.GONE);
-            weizhangmessageTotalView.setTextSize(16);
-            weizhangmessageTotalView.setText("暂无违章记录");
-        } else {
-            String message = String.format("扣分 <font color='#FF0000'>%s分</font>      罚款 <font color='#FF0000'>%s元</font>", 
-                    weizhangMessage.getTotalScores(), weizhangMessage.getTotalFkje());
-            weizhangmessageView.setText(Html.fromHtml(message));
-            String text = String.format("共 <font color='#FF0000'>%s次</font> 违章", weizhangMessage.getData().size());
-            weizhangmessageTotalView.setText(Html.fromHtml(text));
-        }
+        String message = String
+                .format("扣分 <font color='#FF0000'>%s分</font>      罚款 <font color='#FF0000'>%s元</font>",
+                        weizhangMessage.getTotalScores(),
+                        weizhangMessage.getTotalFkje());
+        weizhangmessageView.setText(Html.fromHtml(message));
+        String text = String.format("<font color='#FF0000'>%s</font><br/>违章",
+                weizhangMessage.getUntreatedCount());
+        weizhangmessageTotalView.setText(Html.fromHtml(text));
+
         //返回
         return view;
     }

@@ -1,6 +1,11 @@
 package com.hunan.weizhang.model;
 
-public class WeizhangInfo {
+import java.io.Serializable;
+
+public class WeizhangInfo implements Serializable {
+    
+    private static final long serialVersionUID = 1L;
+    
     private String dsr;
     private String xh;
     private String zt;

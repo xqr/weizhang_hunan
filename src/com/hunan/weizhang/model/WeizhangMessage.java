@@ -1,12 +1,14 @@
 package com.hunan.weizhang.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * 违章消息对象
  *
  */
-public class WeizhangMessage {
+public class WeizhangMessage implements Serializable {
+    private static final long serialVersionUID = 1L;
     /**
      * 返回消息
      */

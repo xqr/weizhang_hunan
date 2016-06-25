@@ -1,8 +1,11 @@
 package com.hunan.weizhang.activity;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -13,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.sprzny.hunan.R;
+import com.hunan.weizhang.activity.MainActivity.GetVerificationCodeTask;
 import com.hunan.weizhang.adapter.WeizhangResponseAdapter;
 import com.hunan.weizhang.api.client.WeizhangApiClient;
 import com.hunan.weizhang.model.CarInfo;
@@ -64,10 +68,20 @@ public class WeizhangResult extends BaseActivity {
 
         Intent intent = this.getIntent();
         
-        CarInfo car = (CarInfo) intent.getSerializableExtra("carInfo");
-        VerificationCode verificationCode = (VerificationCode) intent.getSerializableExtra("verificationCode");
-        String telephone = intent.getStringExtra("telephone");
-        step4(car, verificationCode, telephone);
+        String flag = intent.getStringExtra("flag");
+        CarInfo car = null;
+        VerificationCode verificationCode = null;
+        String telephone = null;
+        WeizhangMessage  weizhangMessage = null;
+        if (flag != null && flag.equals("history")) {
+            weizhangMessage = (WeizhangMessage) intent.getSerializableExtra("weizhangMessage");
+            car = weizhangMessage.getCarInfo();
+        } else {
+            car = (CarInfo) intent.getSerializableExtra("carInfo");
+            verificationCode = (VerificationCode) intent.getSerializableExtra("verificationCode");
+            telephone = intent.getStringExtra("telephone");
+        }
+        step4(weizhangMessage, car, verificationCode, telephone);
 
         // 查询内容: 车牌
         TextView query_chepai = (TextView) findViewById(R.id.query_chepai);
@@ -80,18 +94,22 @@ public class WeizhangResult extends BaseActivity {
         }
     }
 
-    public void step4(final CarInfo car, final VerificationCode verificationCode, final String telephone) {
+    public void step4(final WeizhangMessage  weizhangMessage, final CarInfo car, 
+            final VerificationCode verificationCode, final String telephone) {
         // 声明一个子线程
         new Thread() {
             @Override
             public void run() {
                 try {
-                    // 这里写入子线程需要做的工作
-                    // 优先从历史记录查询
-                    WeizhangMessage weizhangMessage = weizhangHistoryService.getHistory(car);
-                    if(weizhangMessage != null 
-                            && (weizhangMessage.getSearchTimestamp() + 1000 * 60 * 60 * 8) >= new Date().getTime()) {
-                        info = weizhangMessage;
+                    WeizhangMessage newWeizhangMessage = weizhangMessage;
+                    if (weizhangMessage == null) {
+                        // 优先从历史记录查询
+                        newWeizhangMessage = weizhangHistoryService.getHistory(car);
+                    }
+                    
+                    if(newWeizhangMessage != null 
+                            && (newWeizhangMessage.getSearchTimestamp() + 1000 * 60 * 60 * 8) >= new Date().getTime()) {
+                        info = newWeizhangMessage;
                         cwjHandler.post(mUpdateResults); // 高速UI线程可以更新结果了
                         return;
                     }
@@ -106,17 +124,17 @@ public class WeizhangResult extends BaseActivity {
                         newVerificationCode = getVerificationCode();
                     }
                     
-                    weizhangMessage = WeizhangApiClient.toQueryVioltionByCarAction(car, newVerificationCode);
+                    newWeizhangMessage = WeizhangApiClient.toQueryVioltionByCarAction(car, newVerificationCode);
                     //  验证码错误自动重试1次
-                    if (weizhangMessage != null && weizhangMessage.getMessage().equals("图片验证码有误")) {
+                    if (newWeizhangMessage != null && newWeizhangMessage.getMessage().equals("图片验证码有误")) {
                         newVerificationCode = getVerificationCode();
-                        weizhangMessage = WeizhangApiClient.toQueryVioltionByCarAction(car, newVerificationCode);
+                        newWeizhangMessage = WeizhangApiClient.toQueryVioltionByCarAction(car, newVerificationCode);
                     }
                     // 查询成功，缓存结果
-                    if (weizhangMessage != null && weizhangMessage.getCode().equals("1")) {
-                        weizhangHistoryService.appendHistory(weizhangMessage);
+                    if (newWeizhangMessage != null && newWeizhangMessage.getCode().equals("1")) {
+                        weizhangHistoryService.appendHistory(newWeizhangMessage);
                     }
-                    info = weizhangMessage;
+                    info = newWeizhangMessage;
                     cwjHandler.post(mUpdateResults); // 高速UI线程可以更新结果了
                 } catch (Exception e) {
                     

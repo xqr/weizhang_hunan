@@ -1,11 +1,8 @@
 package com.hunan.weizhang.activity;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Locale;
 
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -153,15 +150,8 @@ public class MainActivity extends BaseActivity {
         popXSZ.setOnTouchListener(new popOnTouchListener());
         hideShowXSZ();
         
-        // 初始化验证码
-        try {
-            AssetManager am=getAssets();
-            InputStream is=am.open("code.txt");
-            QrCodeExample.init(is);
-            new GetVerificationCodeTask().execute();
-        } catch (IOException e) {
-            
-        }
+        // 获取验证码
+        new GetVerificationCodeTask().execute();
     }
     
     /**

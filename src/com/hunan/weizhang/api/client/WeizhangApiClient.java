@@ -114,9 +114,9 @@ public class WeizhangApiClient {
                         try {
                             if (weizhang.getZt().equals("0")) {
                                 message.setUntreatedCount(message.getUntreatedCount() + 1);
+                                message.setTotalScores(message.getTotalScores() + Integer.parseInt(weizhang.getWfjfs()));
+                                message.setTotalFkje(message.getTotalFkje() + Integer.parseInt(weizhang.getFkje()));
                             }
-                            message.setTotalScores(message.getTotalScores() + Integer.parseInt(weizhang.getWfjfs()));
-                            message.setTotalFkje(message.getTotalFkje() + Integer.parseInt(weizhang.getFkje()));
                         } catch (Exception e) {
                         }
                     }
