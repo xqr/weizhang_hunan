@@ -36,12 +36,16 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Toast;
 
 public class IndexActivity extends BaseActivity {
-    
+    // 用户位置定位
     private String defaultCityName = "长沙"; 
     private String cityName = null;
     private TextView mDingweiCity;
     private LatLng latLng = null;
     
+    public LocationClient mLocationClient = null;
+    public BDLocationListener myListener = new MyLocationListener();
+    
+    // 天气View
     private TextView mWeatherTmp;
     private ImageView mWeatherIcon;
     private TextView mWeatherWenzi;
@@ -54,22 +58,17 @@ public class IndexActivity extends BaseActivity {
     private GridView mGview;
     private SimpleAdapter mGviewAdapter;
     
-    private Intent intent;  
-    
+    // 违章记录历史查询和展示
     private List<WeizhangMessage> weizhangMessageList;
     private ListView mHistoryView;
     private HistoryListAdapter mHistoryAdapter;
     private WeizhangHistoryService weizhangHistoryService;
-    
-    public LocationClient mLocationClient = null;
-    public BDLocationListener myListener = new MyLocationListener();
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_index);
         
-        intent = new Intent();
         weizhangHistoryService = new WeizhangHistoryService(IndexActivity.this);
         
         mweatherLayout = (RelativeLayout) findViewById(R.id.weather);
@@ -185,6 +184,9 @@ public class IndexActivity extends BaseActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
                         int position, long id) {
+                    
+                    Intent intent = new Intent();
+                    
                     WeizhangMessage weizhangMessage = weizhangMessageList.get(position);
                     if (weizhangMessage == null) {
                         intent.setClass(IndexActivity.this, MainActivity.class);  
@@ -224,6 +226,9 @@ public class IndexActivity extends BaseActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
                 long id) {
+            
+            Intent intent = new Intent();
+            
             if (position == 0) {
                 // 违章查询
                 intent.setClass(IndexActivity.this, MainActivity.class);  
@@ -241,7 +246,6 @@ public class IndexActivity extends BaseActivity {
                     return;
                 }
                 
-                Intent intent = new Intent();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("latLng", latLng);
                 bundle.putString("keywords", queryName);
@@ -252,31 +256,6 @@ public class IndexActivity extends BaseActivity {
             }
         }
     }
-    
-//    private boolean startNativeBaidu(String queryName) {
-//        try {            
-//            Intent newIntent = Intent
-//                    .getIntent("intent://map/place/search?query="+ queryName 
-//                            +"&radius=1000&src=com.sprzny.hunan#Intent;scheme=bdapp;package=com.baidu.BaiduMap;end");
-//            startActivity(newIntent); // 启动调用
-//        } catch (Exception e) {
-//            return false;
-//        }
-//        return true;
-//    }
-//    
-//    private boolean startNativeGaode(String queryName) {
-//        try {
-//            Intent intent = new Intent("android.intent.action.VIEW",
-//            android.net.Uri.parse("androidamap://poi?sourceApplication=com.sprzny.hunan&keywords="
-//                        + queryName +"&dev=0"));
-//            intent.setPackage("com.autonavi.minimap");
-//            startActivity(intent);
-//        } catch (Exception e) {
-//            return false;
-//        }
-//        return true;
-//    }
     
     /**
      * 查询Grid Icon对象

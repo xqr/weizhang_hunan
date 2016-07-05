@@ -93,11 +93,11 @@ public class WeatherInfo implements Serializable {
             return R.drawable.w_dabaoyu_tedabaoyu;
         } else if (type.equals("大雪")) {
             return R.drawable.w_daxue;
-        } else if (type.equals("大雪-暴雪")) {
+        } else if (type.equals("大到暴雪")) {
             return R.drawable.w_daxue_baoxue;
         } else if (type.equals("大雨")) {
             return R.drawable.w_dayu;
-        } else if (type.equals("大雨-暴雨")) {
+        } else if (type.equals("大到暴雨")) {
             return R.drawable.w_dayu_baoyu;
         } else if (type.equals("冻雨")) {
             return R.drawable.w_dongyu;
@@ -119,11 +119,11 @@ public class WeatherInfo implements Serializable {
             return R.drawable.w_wu;
         } else if (type.equals("小雪")) {
             return R.drawable.w_xiaoxue;
-        } else if (type.equals("小雪-中雪")) {
+        } else if (type.equals("小到中雪")) {
             return R.drawable.w_xiaoxue_zhongxue;
         } else if (type.equals("小雨")) {
             return R.drawable.w_xiaoyu;
-        } else if (type.equals("小雨-中雨")) {
+        } else if (type.equals("小到中雨")) {
             return R.drawable.w_xiaoxue_zhongxue;
         } else if (type.equals("扬沙")) {
             return R.drawable.w_yangsha;
@@ -137,11 +137,11 @@ public class WeatherInfo implements Serializable {
             return R.drawable.w_zhenyu;
         } else if (type.equals("中雪")) {
             return R.drawable.w_zhongxue;
-        } else if (type.equals("中雪-大雪")) {
+        } else if (type.equals("中到大雪")) {
             return R.drawable.w_zhongxue_daxue;
         } else if (type.equals("中雨")) {
             return R.drawable.w_zhongyu;
-        } else if (type.equals("中雨-大雨")) {
+        } else if (type.equals("中到大雨")) {
             return R.drawable.w_zhongyu_dayu;
         }
         

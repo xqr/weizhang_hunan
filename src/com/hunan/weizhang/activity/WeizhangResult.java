@@ -1,11 +1,8 @@
 package com.hunan.weizhang.activity;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Date;
 
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -16,7 +13,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.sprzny.hunan.R;
-import com.hunan.weizhang.activity.MainActivity.GetVerificationCodeTask;
 import com.hunan.weizhang.adapter.WeizhangResponseAdapter;
 import com.hunan.weizhang.api.client.WeizhangApiClient;
 import com.hunan.weizhang.model.CarInfo;
