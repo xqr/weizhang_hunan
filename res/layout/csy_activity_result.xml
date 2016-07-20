@@ -30,6 +30,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
+            android:layout_marginLeft="2dp"
+            android:layout_marginStart="2dp"
             android:gravity="center_vertical"
             android:textColor="@color/csy_text"
             android:textSize="@dimen/csy_text_ts" />
@@ -46,6 +48,8 @@
             android:id="@+id/query_city"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_marginStart="2dp"
             android:layout_weight="2"
             android:gravity="center_vertical"
             android:textColor="@color/csy_text"

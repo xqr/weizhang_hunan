@@ -61,8 +61,7 @@ public class WeizhangHistoryService {
             WeizhangMessage history = list.get(i);
             CarInfo oldCar = history.getCarInfo();
             CarInfo car = weizhangMessage.getCarInfo();
-            if (!(oldCar.getChepaiNo().equals(car.getChepaiNo()) 
-                    && oldCar.getEngineNo().equals(car.getEngineNo()))
+            if (!(oldCar.getChepaiNo().equals(car.getChepaiNo()))
                     && count < maxCount) {
                 historyList.add(history);
             }

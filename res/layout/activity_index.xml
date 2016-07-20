@@ -9,45 +9,71 @@
     <ImageView 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:scaleType="fitXY"
+        android:scaleType="fitEnd"
         android:layout_alignParentBottom="true"
         android:src="@drawable/bg_550"/>
     
-    <RelativeLayout android:id="@+id/topBanner"
+    <RelativeLayout 
+        android:id="@+id/titlebar"
         android:layout_width="fill_parent"
-        android:layout_height="240dp"
-        android:background="@drawable/hunanbanner" >
-
-        <LinearLayout
-            android:id="@+id/dingwei"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginEnd="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/csy_city"
-            android:paddingBottom="4dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingTop="4dp" >
-
-            <ImageView
+        android:layout_height="@dimen/csy_btn_h"  
+        android:layout_alignParentTop="true"
+        android:background="@color/csy_red"
+        android:paddingLeft="@dimen/csy_pd"
+        android:paddingRight="@dimen/csy_pd" >  
+    
+        <ImageView 
+                android:id="@+id/dingwei_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_centerVertical="true"
                 android:src="@drawable/dingwei" />
 
             <TextView
                 android:id="@+id/dingwei_city"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:text="长沙"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_toRightOf="@id/dingwei_icon"
+                android:layout_toEndOf="@id/dingwei_icon"
+                android:textSize="14sp"
+                android:text="上海"
                 android:textColor="@android:color/white" />
-        </LinearLayout>
-
+    
+    <TextView
+        android:id="@+id/txtTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:text="@string/app_name"
+        android:textSize="18.0sp"
+        android:textColor="@android:color/white" />    
+     
+    <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="center"
+                android:layout_centerVertical="true"
+                android:src="@drawable/jia" 
+                android:onClick="weizhangClick"/>
+    
+    </RelativeLayout>
+    
+    
+    <RelativeLayout 
+        android:id="@+id/topBanner"
+        android:layout_width="fill_parent"
+        android:layout_height="180dp"
+        android:layout_below="@id/titlebar"
+        android:background="@drawable/shanghaibanner" >
+    
         <RelativeLayout
             android:id="@+id/weather"
             android:layout_width="wrap_content"
@@ -119,32 +145,39 @@
             </RelativeLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_toEndOf="@+id/weather_left"
                 android:layout_toRightOf="@+id/weather_left"
                 android:background="#8063B8FF"
                 android:orientation="vertical"
                 android:paddingBottom="6dp"
-                android:paddingLeft="6dp" >
-
+                android:paddingRight="6dp" >
+                
+                <TextView android:id="@+id/xc_week"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginTop="6dp"
+                    android:text="星期二"
+                    android:textColor="@android:color/white"
+                    android:textSize="28sp" />
+                
+                <TextView android:id="@+id/xc_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:text="2016年7月5日"
+                    android:textColor="@android:color/white" />
+                
                 <TextView android:id="@+id/xc_index"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginBottom="12dp"
-                    android:layout_marginTop="10dp"
-                    android:text="洗车指数：不宜"
-                    android:textColor="@android:color/white"
-                    android:textSize="16sp" />
-
-                <TextView android:id="@+id/xc_details"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:lineSpacingMultiplier="1.4"
-                    android:paddingRight="2dp"
-                    android:text="不宜洗车，未来24小时内有雨"
-                    android:textColor="@android:color/white" />
+                    android:layout_gravity="end"
+                    android:text="不宜洗车"
+                    android:textColor="@android:color/white"/>
+                
             </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>
@@ -163,12 +196,51 @@
         
     </GridView>
     
+    <View android:id="@+id/silver_view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/icon_gview"
+            android:background="@color/silver" />
+    
+    <!-- 今日油价 -->
+    <LinearLayout 
+        android:id="@+id/today_oic_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/silver_view"
+        android:background="@android:color/white"
+        android:paddingLeft="16dp"
+        android:orientation="horizontal">
+        
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:paddingBottom="4dp"
+            android:text="今日油价"/>
+        
+        <View 
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/silver" 
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"/>
+        
+        <TextView 
+            android:id="@+id/oic_prices"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"/>
+        
+    </LinearLayout>
+    
     <!-- 查询历史列表 -->
     <ListView
         android:id="@+id/history_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/icon_gview"
+        android:layout_below="@+id/today_oic_price"
         android:layout_marginTop="20dp"
         android:divider="#C0C0C0"   
         android:dividerHeight="1px"/>

@@ -40,7 +40,7 @@
 	            android:textColor="#ffff0000" />
 	    </RelativeLayout>
 	    
-	    <RelativeLayout
+	    <!-- RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/csy_pd">
@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/csy_label_w"     
                 android:textColor="#ffff0000" />
-       </RelativeLayout>
+       </RelativeLayout> -->
 	    
 	    <RelativeLayout
 	        android:layout_width="fill_parent"

@@ -2,7 +2,10 @@ package com.hunan.weizhang.activity;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,17 +16,21 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
 import com.hunan.weizhang.adapter.HistoryListAdapter;
+import com.hunan.weizhang.api.client.OilPriceApiClient;
 import com.hunan.weizhang.api.client.WeatherApiClient;
 import com.hunan.weizhang.model.LatLng;
+import com.hunan.weizhang.model.OilPriceInfo;
 import com.hunan.weizhang.model.WeatherInfo;
 import com.hunan.weizhang.model.WeizhangMessage;
 import com.hunan.weizhang.qrcode.QrCodeExample;
 import com.hunan.weizhang.service.WeizhangHistoryService;
-import com.sprzny.hunan.R;
+import com.sprzny.shanghai.R;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -37,7 +44,8 @@ import android.widget.Toast;
 
 public class IndexActivity extends BaseActivity {
     // 用户位置定位
-    private String defaultCityName = "长沙"; 
+    private String defaultCityName = "上海"; 
+    private String provName = "上海";
     private String cityName = null;
     private TextView mDingweiCity;
     private LatLng latLng = null;
@@ -51,8 +59,14 @@ public class IndexActivity extends BaseActivity {
     private TextView mWeatherWenzi;
     private TextView mWeatherNow;
     private TextView mXcIndex;
-    private TextView mXcDetails;
     private RelativeLayout mweatherLayout;
+    
+    // 油价
+    private TextView mOicPrices;
+    
+    // 日期
+    private TextView mXcWeek;
+    private TextView mXcDate;
     
     // 网格Icons
     private GridView mGview;
@@ -76,8 +90,10 @@ public class IndexActivity extends BaseActivity {
         mHistoryView = (ListView) findViewById(R.id.history_list);
         
         mDingweiCity = (TextView) findViewById(R.id.dingwei_city);
+        mOicPrices = (TextView) findViewById(R.id.oic_prices);
         initWeather();
         initIcons();
+        initDate();
         
         // 查询历史
         new SearchHistoryTask().execute();
@@ -93,15 +109,15 @@ public class IndexActivity extends BaseActivity {
             mDingweiCity.setText(cityName);
             new WeatherTask().execute(cityName);
         }
-        
-        // 初始化验证码
-        try {
-            AssetManager am=getAssets();
-            InputStream is=am.open("code.txt");
-            QrCodeExample.init(is);
-        } catch (IOException e) {
-            
-        }
+//        
+//        // 初始化验证码
+//        try {
+//            AssetManager am=getAssets();
+//            InputStream is=am.open("code.txt");
+//            QrCodeExample.init(is);
+//        } catch (IOException e) {
+//            
+//        }
     }
     
    /**
@@ -113,9 +129,59 @@ public class IndexActivity extends BaseActivity {
        mWeatherWenzi = (TextView) findViewById(R.id.weather_wenzi);
        mWeatherNow = (TextView) findViewById(R.id.weather_now);
        mXcIndex = (TextView) findViewById(R.id.xc_index);
-       mXcDetails = (TextView) findViewById(R.id.xc_details);
    }
-    
+   
+   /**
+    * 初始化日期
+    */
+   private void initDate() {
+       mXcWeek = (TextView) findViewById(R.id.xc_week);
+       mXcDate = (TextView) findViewById(R.id.xc_date);
+       
+       Date date=new Date(); 
+       Calendar c=Calendar.getInstance(); 
+       c.setTime(date); 
+       //今天是这个星期的第几天 
+       int week=c.get(Calendar.DAY_OF_WEEK); 
+       SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
+       mXcDate.setText(sdf.format(date));
+       try {
+           mXcWeek.setText(weeks[week-1]);
+       } catch (Exception e) {
+           
+       }
+   }
+   
+   private String[] weeks = new String[] {
+           "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"
+   };
+   
+   public class  OilPriceTask extends AsyncTask<String, OilPriceInfo, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            String prov = params[0];
+            if (prov == null || TextUtils.isEmpty(prov)) {
+                prov = "上海";
+            }
+            
+            OilPriceInfo oilPrice = OilPriceApiClient.SearchOilPrice(prov);
+            if (oilPrice == null) {
+                return false;
+            }
+            
+            publishProgress(oilPrice);
+            
+            return null;
+        }
+        @Override
+        protected void onProgressUpdate(OilPriceInfo... values) {
+            OilPriceInfo oilPrice = values[0];
+            
+            mOicPrices.setText(Html.fromHtml(oilPrice.getShowText()));
+        }
+   }
+   
    public class  WeatherTask extends AsyncTask<String, WeatherInfo, Boolean> {
 
         @Override
@@ -147,7 +213,6 @@ public class IndexActivity extends BaseActivity {
             mWeatherNow.setBackgroundColor(getResources().getColor(weather.getPmLevel().getColor()));
 
             mXcIndex.setText("洗车指数：" + weather.getXcIndex());
-            mXcDetails.setText(weather.getXcDetails());
             
             mweatherLayout.setVisibility(View.VISIBLE);
         }
@@ -219,6 +284,18 @@ public class IndexActivity extends BaseActivity {
     }
     
     /**
+     * 切换到违章Activity
+     * 
+     * @param v
+     */
+    public void weizhangClick(View v){
+        Intent intent = new Intent();
+        // 违章查询
+        intent.setClass(IndexActivity.this, MainActivity.class);  
+        startActivity(intent);
+    }
+    
+    /**
      * icon点击，切换Activity
      */
     class  IconItemClickListener implements OnItemClickListener {
@@ -227,13 +304,11 @@ public class IndexActivity extends BaseActivity {
         public void onItemClick(AdapterView<?> parent, View view, int position,
                 long id) {
             
-            Intent intent = new Intent();
-            
             if (position == 0) {
                 // 违章查询
-                intent.setClass(IndexActivity.this, MainActivity.class);  
-                startActivity(intent);
+                weizhangClick(view);
             } else {
+                Intent intent = new Intent();
                 String queryName = "停车场";
                 if (position == 2) {
                     queryName = "加油站";
@@ -263,8 +338,8 @@ public class IndexActivity extends BaseActivity {
      * @return
      */
     private List<Map<String, Object>> getIconData() {
-        int[] icon = { R.drawable.icon_weizhang, R.drawable.icon_tingchechang,
-                R.drawable.icon_jiayouzhan, R.drawable.icon_yinhang };
+        int[] icon = { R.drawable.icon_weizhang_color, R.drawable.icon_tingchechang_color,
+                R.drawable.icon_jiayouzhan_color, R.drawable.icon_yinhang };
         String[] iconName = { "违章查询", "附近停车", "附近加油", "附近银行" };
         
         
@@ -281,7 +356,7 @@ public class IndexActivity extends BaseActivity {
     /**
      * 初始化配置
      */
-    private void initLocation(){
+    private void initLocation() {
         LocationClientOption option = new LocationClientOption();
         option.setLocationMode(LocationMode.Device_Sensors);//可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
         option.setCoorType("bd09ll");//可选，默认gcj02，设置返回的定位结果坐标系
@@ -318,8 +393,18 @@ public class IndexActivity extends BaseActivity {
                 } else {
                     cityName = city;
                 }
+                String prov = location.getProvince();
+                if (prov != null && !prov.isEmpty()) {
+                    if (prov.endsWith("省") || prov.endsWith("市")) {
+                        provName = prov.substring(0, prov.length() - 1);
+                    } else {
+                        provName = prov;
+                    }
+                }
+                
                 mDingweiCity.setText(cityName);
                 new WeatherTask().execute(cityName);
+                new OilPriceTask().execute(provName);
             }
         }
     }

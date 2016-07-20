@@ -6,7 +6,7 @@ import com.hunan.weizhang.adapter.NearListAdapter;
 import com.hunan.weizhang.api.client.LbsSearchService;
 import com.hunan.weizhang.model.CustomSearchResultData;
 import com.hunan.weizhang.model.LatLng;
-import com.sprzny.hunan.R;
+import com.sprzny.shanghai.R;
 
 import android.content.Intent;
 import android.os.AsyncTask;

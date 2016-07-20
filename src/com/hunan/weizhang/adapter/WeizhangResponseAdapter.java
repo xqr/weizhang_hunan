@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.sprzny.hunan.R;
+import com.sprzny.shanghai.R;
 import com.hunan.weizhang.model.WeizhangInfo;
 
 public class WeizhangResponseAdapter extends BaseAdapter {
@@ -46,19 +46,19 @@ public class WeizhangResponseAdapter extends BaseAdapter {
         TextView wz_money = (TextView) view.findViewById(R.id.wz_money);
         TextView wz_addr = (TextView) view.findViewById(R.id.wz_addr);
         TextView wz_info = (TextView) view.findViewById(R.id.wz_info);
-        TextView wz_status = (TextView) view.findViewById(R.id.wz_status);
+//        TextView wz_status = (TextView) view.findViewById(R.id.wz_status);
         
         // 填写值
         wz_time.setText(model.getWfsj());
-        wz_money.setText("计"+model.getWfjfs()+"分, 罚"+model.getFkje()+"元");
+        wz_money.setText("扣"+model.getWfjfs()+"分, 罚"+model.getFkje()+"元");
         wz_addr.setText(model.getWfdz());
         wz_info.setText(model.getWfxw());
-        if (model.getZt().equals("0")) {
-            wz_status.setText("未处理");
-        } else {
-            wz_status.setText("已处理");
-            wz_status.setTextColor(mContext.getResources().getColor(R.color.csy_text));
-        }
+//        if (model.getZt().equals("0")) {
+//            wz_status.setText("未处理");
+//        } else {
+//            wz_status.setText("已处理");
+//            wz_status.setTextColor(mContext.getResources().getColor(R.color.csy_text));
+//        }
         
         return view;
     }

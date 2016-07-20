@@ -17,15 +17,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sprzny.hunan.R;
-import com.hunan.weizhang.api.client.WeizhangApiClient;
+import com.sprzny.shanghai.R;
+import com.hunan.weizhang.api.client.weizhang.HunanWeizhangApiClient;
 import com.hunan.weizhang.model.CarInfo;
 import com.hunan.weizhang.model.VerificationCode;
 import com.hunan.weizhang.qrcode.QrCodeExample;
+import com.hunan.weizhang.service.AllCapTransformationMethod;
 
 public class MainActivity extends BaseActivity {
     
-    private String defaultChepai = "湘"; 
+    private String defaultChepai = "沪"; 
     
     // 车牌简称
     private TextView short_name;
@@ -75,6 +76,10 @@ public class MainActivity extends BaseActivity {
         short_name = (TextView) findViewById(R.id.chepai_sz);
         telephone_number = (EditText) findViewById(R.id.telephone_number);
         // ----------------------------------------------
+        
+        // 增加字母大小监控转换
+        chepai_number.setTransformationMethod(new AllCapTransformationMethod());
+        engine_number.setTransformationMethod(new AllCapTransformationMethod());
         
         // 默认选中小汽车
         haopai_lx.setSelection(1, true);
@@ -150,8 +155,8 @@ public class MainActivity extends BaseActivity {
         popXSZ.setOnTouchListener(new popOnTouchListener());
         hideShowXSZ();
         
-        // 获取验证码
-        new GetVerificationCodeTask().execute();
+//        //获取验证码
+//        new GetVerificationCodeTask().execute();
     }
     
     /**
@@ -163,7 +168,7 @@ public class MainActivity extends BaseActivity {
         protected Boolean doInBackground(Void... params) {
             int i = 1;
             do {
-                verificationCode = WeizhangApiClient.getVerifCodeAction();
+                verificationCode = HunanWeizhangApiClient.getVerifCodeAction();
                 if (verificationCode != null) {
                     String result = QrCodeExample.qrCode(verificationCode.getTpyzm());
                     if (result == null || result.length() != 4) {
@@ -210,8 +215,9 @@ public class MainActivity extends BaseActivity {
             Toast.makeText(MainActivity.this, "输入发动机号不为空", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (car.getEngineNo().length() != 6) {
-            Toast.makeText(MainActivity.this, "输入发动机号后" + 6 + "位", Toast.LENGTH_SHORT).show();
+        
+        if (car.getEngineNo().length() < 5) {
+            Toast.makeText(MainActivity.this, "请输入完整的发动机号", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;

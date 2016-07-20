@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.sprzny.hunan"
-    android:versionCode="2"
-    android:versionName="1.1" >
+    package="com.sprzny.shanghai"
+    android:versionCode="4"
+    android:versionName="1.3" >
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="21" />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:screenOrientation="portrait"
         android:theme="@android:style/Theme.NoTitleBar" >
         <activity
             android:name="com.hunan.weizhang.activity.SplashActivity"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,26 +23,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.hunan.weizhang.activity.ShortNameList" >
+        <activity 
+            android:name="com.hunan.weizhang.activity.ShortNameList" 
+            android:screenOrientation="portrait">
         </activity>
         <activity android:name="com.hunan.weizhang.activity.ProvinceList" >
         </activity>
-        <activity android:name="com.hunan.weizhang.activity.CityList" >
-        </activity>
-        <activity android:name="com.hunan.weizhang.activity.WeizhangResult" >
+        <activity 
+            android:name="com.hunan.weizhang.activity.WeizhangResult" 
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="com.hunan.weizhang.activity.MainActivity"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>
         <activity
             android:name="com.hunan.weizhang.activity.IndexActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_index" >
         </activity>
 
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="575d5648e0f55a3577001d02" >
+            android:value="577e3d7267e58e97f2003a07" >
         </meta-data>
         <meta-data
             android:name="UMENG_CHANNEL"
@@ -58,6 +62,7 @@
 
         <activity
             android:name="com.hunan.weizhang.activity.NearActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_near" >
         </activity>
     </application>

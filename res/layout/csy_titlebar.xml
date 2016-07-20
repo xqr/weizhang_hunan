@@ -4,24 +4,24 @@
     android:layout_width="fill_parent"
     android:layout_height="@dimen/csy_btn_h"  
     android:layout_alignParentTop="true"
-    android:background="@color/csy_blue"
+    android:background="@color/csy_red"
     android:paddingLeft="@dimen/csy_pd"
-    android:paddingRight="@dimen/csy_pd" > 	
+    android:paddingRight="@dimen/csy_pd" >  
     
     <Button
- 	    android:id="@+id/btnBack"
- 	    android:layout_width="50.0dp"
- 	    android:layout_height="fill_parent"
- 	    android:layout_alignParentLeft="true"
- 	    android:layout_centerVertical="true"
- 	    android:drawableLeft="@drawable/csy_arr_back"
- 	    android:drawablePadding="5.0dip"
- 	    android:background="@android:color/transparent"
- 	    android:gravity="center_vertical"
- 	    android:textColor="@android:color/white"
- 	    android:textSize="14.0sp"
- 	    android:text="返回"
- 	    android:visibility="gone" />
+        android:id="@+id/btnBack"
+        android:layout_width="50.0dp"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:drawableLeft="@drawable/csy_arr_back"
+        android:drawablePadding="5.0dip"
+        android:background="@android:color/transparent"
+        android:gravity="center_vertical"
+        android:textColor="@android:color/white"
+        android:textSize="14.0sp"
+        android:text="返回"
+        android:visibility="gone" />
     
     <TextView
         android:id="@+id/txtTitle"

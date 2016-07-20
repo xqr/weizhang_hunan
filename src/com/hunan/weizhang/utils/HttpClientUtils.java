@@ -84,6 +84,7 @@ public class HttpClientUtils {
                     httpGet.setHeader(key, headerMap.get(key));
                 }
             }
+            
             HttpResponse response = httpclient.execute(httpGet);
             if (response == null) {
                 return null;
@@ -92,7 +93,7 @@ public class HttpClientUtils {
             String htmlStr = null;
             if (entity != null) {
                 entity = new BufferedHttpEntity(entity);
-                htmlStr = EntityUtils.toString(entity);
+                htmlStr = EntityUtils.toString(entity, "UTF-8");
                 entity.consumeContent();
             }
             

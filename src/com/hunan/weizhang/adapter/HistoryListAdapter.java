@@ -2,7 +2,7 @@ package com.hunan.weizhang.adapter;
 
 import java.util.List;
 
-import com.sprzny.hunan.R;
+import com.sprzny.shanghai.R;
 import com.hunan.weizhang.model.WeizhangMessage;
 
 import android.content.Context;
@@ -52,7 +52,7 @@ public class HistoryListAdapter extends BaseAdapter {
         // 绑定数据
         chepaiView.setText(weizhangMessage.getCarInfo().getChepaiNo());
         String message = String
-                .format("扣分 <font color='#FF0000'>%s分</font>      罚款 <font color='#FF0000'>%s元</font>",
+                .format("扣 <font color='#FF0000'>%s分</font>      罚款 <font color='#FF0000'>%s元</font>",
                         weizhangMessage.getTotalScores(),
                         weizhangMessage.getTotalFkje());
         weizhangmessageView.setText(Html.fromHtml(message));

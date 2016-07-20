@@ -1,6 +1,6 @@
 package com.hunan.weizhang.activity;
 
-import com.sprzny.hunan.R;
+import com.sprzny.shanghai.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -66,7 +66,7 @@ public class ShortNameList extends Activity {
 
     private String[] getDate() {
         return new String[] { "京", "津", "沪", "川", "鄂", "甘", "赣", "桂", "贵", "黑",
-                "吉", "翼", "晋", "辽", "鲁", "蒙", "闽", "宁", "青", "琼", "陕", "苏",
+                "吉", "冀", "晋", "辽", "鲁", "蒙", "闽", "宁", "青", "琼", "陕", "苏",
                 "皖", "湘", "新", "渝", "豫", "粤", "云", "藏", "浙", ""};
     }
 }
