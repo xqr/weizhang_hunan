@@ -6,7 +6,8 @@ import com.hunan.weizhang.adapter.NearListAdapter;
 import com.hunan.weizhang.api.client.LbsSearchService;
 import com.hunan.weizhang.model.CustomSearchResultData;
 import com.hunan.weizhang.model.LatLng;
-import com.sprzny.shanghai.R;
+import com.hunan.weizhang.utils.NetUtil;
+import com.sprzny.hubei.R;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -55,6 +56,12 @@ public class NearActivity extends BaseActivity {
         
         // 列表对象
         mNearListView =  (ListView) findViewById(R.id.list_near_line);
+        
+        // 检查网络情况
+        if (!NetUtil.checkNet(this)) {
+            Toast.makeText(NearActivity.this, "网络连接不可用", Toast.LENGTH_LONG).show();
+            return;
+        }
         
         // 查询附近任务
         new NearTask().execute();

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.sprzny.shanghai"
+    package="com.sprzny.hubei"
     android:versionCode="4"
     android:versionName="1.3" >
 
@@ -46,7 +46,7 @@
 
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="577e3d7267e58e97f2003a07" >
+            android:value="579c655c67e58e934f0017e2" >
         </meta-data>
         <meta-data
             android:name="UMENG_CHANNEL"
@@ -64,7 +64,7 @@
             android:name="com.hunan.weizhang.activity.NearActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_near" >
-        </activity>
+        </activity>  
     </application>
 
     <!-- 这个权限用于进行网络定位 -->

@@ -78,7 +78,7 @@ public class HttpClientUtils {
             HttpGet httpGet = new HttpGet(uri);
             httpclient.getParams().setParameter(ClientPNames.COOKIE_POLICY,
                     CookiePolicy.BROWSER_COMPATIBILITY);
-            httpclient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 60000); 
+            httpclient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 30000); 
             if (headerMap != null) {
                 for (String key : headerMap.keySet()) {
                     httpGet.setHeader(key, headerMap.get(key));
@@ -86,7 +86,8 @@ public class HttpClientUtils {
             }
             
             HttpResponse response = httpclient.execute(httpGet);
-            if (response == null) {
+            if (response == null 
+                    || response.getStatusLine().getStatusCode() != 200) {
                 return null;
             }
             HttpEntity entity = response.getEntity();

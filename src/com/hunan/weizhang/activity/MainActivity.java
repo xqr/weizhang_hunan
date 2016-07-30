@@ -17,7 +17,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sprzny.shanghai.R;
+import com.sprzny.hubei.R;
 import com.hunan.weizhang.api.client.weizhang.HunanWeizhangApiClient;
 import com.hunan.weizhang.model.CarInfo;
 import com.hunan.weizhang.model.VerificationCode;
@@ -26,7 +26,7 @@ import com.hunan.weizhang.service.AllCapTransformationMethod;
 
 public class MainActivity extends BaseActivity {
     
-    private String defaultChepai = "沪"; 
+    private String defaultChepai = "鄂"; 
     
     // 车牌简称
     private TextView short_name;
@@ -209,15 +209,20 @@ public class MainActivity extends BaseActivity {
             Toast.makeText(MainActivity.this, "您输入的车牌号有误", Toast.LENGTH_SHORT).show();
             return false;
         }
+        if (car.getChepaiNo().charAt(1) < 'A' 
+                || car.getChepaiNo().charAt(1) > 'Z') {
+            Toast.makeText(MainActivity.this, "您输入的车牌号有误", Toast.LENGTH_SHORT).show();
+            return false;
+        }
         
       //发动机
         if (car.getEngineNo().equals("")) {
-            Toast.makeText(MainActivity.this, "输入发动机号不为空", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "输入车架号不为空", Toast.LENGTH_SHORT).show();
             return false;
         }
         
         if (car.getEngineNo().length() < 5) {
-            Toast.makeText(MainActivity.this, "请输入完整的发动机号", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "请输入车架号后5位", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;

@@ -1,8 +1,7 @@
 package com.hunan.weizhang.activity;
 
-import java.util.Date;
-
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -12,19 +11,15 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.sprzny.shanghai.R;
+import com.sprzny.hubei.R;
 import com.hunan.weizhang.adapter.WeizhangResponseAdapter;
-import com.hunan.weizhang.api.client.weizhang.HunanWeizhangApiClient;
-import com.hunan.weizhang.api.client.weizhang.ShanghaiWeizhangApiClient;
 import com.hunan.weizhang.model.CarInfo;
 import com.hunan.weizhang.model.VerificationCode;
 import com.hunan.weizhang.model.WeizhangMessage;
-import com.hunan.weizhang.qrcode.QrCodeExample;
 import com.hunan.weizhang.service.WeizhangHistoryService;
 import com.hunan.weizhang.service.WeizhangService;
 import com.hunan.weizhang.service.WzHunanService;
 import com.hunan.weizhang.service.weizhang.HubeiWeizhangService;
-import com.hunan.weizhang.service.weizhang.ShanghaiWeizhangService;
 
 /**
  * title：查询违章信息
@@ -63,6 +58,7 @@ public class WeizhangResult extends BaseActivity {
 
         weizhangHistoryService = new WeizhangHistoryService(WeizhangResult.this);
         
+        // loading
         popLoader = (View) findViewById(R.id.popLoader);
         popLoader.setVisibility(View.VISIBLE);
 
@@ -78,7 +74,6 @@ public class WeizhangResult extends BaseActivity {
             car = weizhangMessage.getCarInfo();
         } else {
             car = (CarInfo) intent.getSerializableExtra("carInfo");
-//            verificationCode = (VerificationCode) intent.getSerializableExtra("verificationCode");
             telephone = intent.getStringExtra("telephone");
         }
         step4(weizhangMessage, car, verificationCode, telephone);
@@ -93,7 +88,12 @@ public class WeizhangResult extends BaseActivity {
             query_city.setText("大型汽车");
         }
     }
-
+    
+//    public class  SearchWeizhangMessageTask extends AsyncTask<Object, Object, Object> {
+//        
+//    }
+    
+    
     public void step4(final WeizhangMessage  weizhangMessage, final CarInfo car, 
             final VerificationCode verificationCode, final String telephone) {
         // 声明一个子线程
@@ -101,9 +101,8 @@ public class WeizhangResult extends BaseActivity {
             @Override
             public void run() {
                 try {
-                    WeizhangService weizhangService = new ShanghaiWeizhangService();
-                    // TODO 切换成湖北
-//                    WeizhangService weizhangService = new HubeiWeizhangService();
+                    //切换成湖北
+                    WeizhangService weizhangService = new HubeiWeizhangService(weizhangHistoryService);
                     
                     WeizhangMessage newWeizhangMessage = weizhangMessage;
                     if (newWeizhangMessage == null) {
@@ -113,103 +112,22 @@ public class WeizhangResult extends BaseActivity {
                     
                     newWeizhangMessage = weizhangService.searchWeizhangMessage(newWeizhangMessage);
                     
-                    if (newWeizhangMessage != null
-                            && WeizhangMessage.SUCCESS_CODE.equals(newWeizhangMessage.getCode())){
-                        // 查询成功，记录到历史记录中
-                        weizhangHistoryService.appendHistory(newWeizhangMessage);
-                    } else if (weizhangMessage == null) {
-                        // 官网查询失败，从历史记录中查询旧历史
-                        WeizhangMessage historyWeizhangMessage = weizhangHistoryService.getHistory(car);
-                        if (historyWeizhangMessage != null) {
-                            newWeizhangMessage = historyWeizhangMessage;
-                        }
+                    if (weizhangMessage == null 
+                            &&newWeizhangMessage != null 
+                            && WeizhangMessage.SUCCESS_CODE.equals(newWeizhangMessage.getCode())) {
+                        // 从业务服务器获取信息(从历史记录进入则不需要)
+                        WzHunanService.queryWeizhang(car, telephone);
                     }
-//                    
-//                    
-//                    
-//                    
-//                    
-//                    
-//                    WeizhangMessage newWeizhangMessage = null;
-//                    if (weizhangMessage != null) {
-//                        // TODO 从历史记录点击进入
-//                        
-//                    } else {
-//                        // TODO 直接查询，查询失败后尝试从历史记录查询
-//                        newWeizhangMessage = new WeizhangMessage();
-//                        newWeizhangMessage.setCarInfo(car);
-//                        newWeizhangMessage = weizhangService.
-//                    }
-//                    // TODO 保存查询结果
-//                    
-//                    
-//                    
-//                    
-//                    WeizhangMessage newWeizhangMessage = weizhangMessage;
-//                    if (weizhangMessage == null) {
-//                        // 优先从历史记录查询
-//                        newWeizhangMessage = weizhangHistoryService.getHistory(car);
-//                    }
-//                    
-//                    if(newWeizhangMessage != null 
-//                            && (newWeizhangMessage.getSearchTimestamp() + 1000 * 60 * 60 * 8) >= new Date().getTime()) {
-//                        info = newWeizhangMessage;
-//                        cwjHandler.post(mUpdateResults); // 高速UI线程可以更新结果了
-//                        return;
-//                    }
-//                    
-//                    // 从业务服务器获取信息
-//                    WzHunanService.queryWeizhang(car, telephone);
-//                    
-////                    // 校验验证码正确性
-////                    VerificationCode newVerificationCode = verificationCode;
-////                    if (newVerificationCode == null 
-////                            || newVerificationCode.getRandCode() == null) {
-////                        newVerificationCode = getVerificationCode();
-////                    }
-//                    
-//                    newWeizhangMessage = ShanghaiWeizhangApiClient.toQueryVioltionByCarAction(car, null);
-////                    //  验证码错误自动重试1次
-////                    if (newWeizhangMessage != null && newWeizhangMessage.getMessage().equals("图片验证码有误")) {
-////                        newVerificationCode = getVerificationCode();
-////                        newWeizhangMessage = HuNanWeizhangApiClient.toQueryVioltionByCarAction(car, newVerificationCode);
-////                    }
-//                    // 查询成功，缓存结果
-//                    if (newWeizhangMessage != null && newWeizhangMessage.getCode().equals("1")) {
-//                        weizhangHistoryService.appendHistory(newWeizhangMessage);
-//                    } else {
-//                        newWeizhangMessage = weizhangMessage;
-//                    }
+                    
+                    // 高速UI线程可以更新结果了
                     info = newWeizhangMessage;
-                    cwjHandler.post(mUpdateResults); // 高速UI线程可以更新结果了
+                    cwjHandler.post(mUpdateResults); 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }.start();
     }
-
-//    /**
-//     * 获取验证码
-//     */
-//    public VerificationCode getVerificationCode() {
-//        int i = 1;
-//        VerificationCode verificationCode = null;
-//        do {
-//            verificationCode = HuNanWeizhangApiClient.getVerifCodeAction();
-//            if (verificationCode != null) {
-//                String result = QrCodeExample.qrCode(verificationCode.getTpyzm());
-//                if (result == null || result.length() != 4) {
-//                    verificationCode = null;
-//                } else {
-//                    verificationCode.setRandCode(result);
-//                }
-//            }
-//            i++;
-//        } while(verificationCode == null && i  <= 3);
-//        
-//        return verificationCode;
-//    }
     
     final Runnable mUpdateResults = new Runnable() {
         public void run() {

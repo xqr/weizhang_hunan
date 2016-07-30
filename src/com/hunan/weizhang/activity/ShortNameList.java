@@ -1,6 +1,6 @@
 package com.hunan.weizhang.activity;
 
-import com.sprzny.shanghai.R;
+import com.sprzny.hubei.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;

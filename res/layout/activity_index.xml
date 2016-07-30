@@ -18,7 +18,7 @@
         android:layout_width="fill_parent"
         android:layout_height="@dimen/csy_btn_h"  
         android:layout_alignParentTop="true"
-        android:background="@color/csy_red"
+        android:background="@color/csy_green"
         android:paddingLeft="@dimen/csy_pd"
         android:paddingRight="@dimen/csy_pd" >  
     
@@ -40,7 +40,7 @@
                 android:layout_toRightOf="@id/dingwei_icon"
                 android:layout_toEndOf="@id/dingwei_icon"
                 android:textSize="14sp"
-                android:text="上海"
+                android:text="武汉"
                 android:textColor="@android:color/white" />
     
     <TextView
@@ -72,7 +72,7 @@
         android:layout_width="fill_parent"
         android:layout_height="180dp"
         android:layout_below="@id/titlebar"
-        android:background="@drawable/shanghaibanner" >
+        android:background="@drawable/hubeibanner" >
     
         <RelativeLayout
             android:id="@+id/weather"

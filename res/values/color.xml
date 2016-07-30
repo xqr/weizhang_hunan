@@ -3,8 +3,8 @@
     <color name="csy_bg_body">#ffe9e9e9</color> 
     <color name="csy_row_on">#fff0f0f0</color> 
     <color name="csy_border">#ffd0d0d0</color>
-	<!--  color name="csy_green">#ff3caa0f</color>	
-	<color name="csy_green_on">#ff28780a</color>-->
+	<color name="csy_green">#ff3caa0f</color>	
+	<color name="csy_green_on">#ff28780a</color>
 	<color name="csy_blue">#ff0a7dd2</color>
 	<color name="csy_blue_on">#ff0a64aa</color>	
 	<color name="csy_red">#ffDB335B</color>

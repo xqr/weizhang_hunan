@@ -1,6 +1,6 @@
 package com.hunan.weizhang.activity;
 
-import com.sprzny.shanghai.R;
+import com.sprzny.hubei.R;
 import com.umeng.analytics.MobclickAgent;
 
 import android.content.Intent;

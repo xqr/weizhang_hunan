@@ -2,7 +2,7 @@ package com.hunan.weizhang.model;
 
 import java.io.Serializable;
 
-import com.sprzny.shanghai.R;
+import com.sprzny.hubei.R;
 
 public class WeatherInfo implements Serializable {
 
