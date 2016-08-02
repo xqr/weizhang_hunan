@@ -24,7 +24,6 @@ import com.hunan.weizhang.utils.NetUtil;
 import com.sprzny.hubei.R;
 
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
