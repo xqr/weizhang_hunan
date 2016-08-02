@@ -100,7 +100,7 @@
 
             <TextView
                 style="@style/csy_row_label"
-                android:text="@string/csy_engine_lab" />
+                android:text="@string/csy_chejia_lab" />
 
             <RelativeLayout
                 android:layout_width="fill_parent"

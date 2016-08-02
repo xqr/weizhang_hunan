@@ -20,6 +20,7 @@ import com.hunan.weizhang.service.WeizhangHistoryService;
 import com.hunan.weizhang.service.WeizhangService;
 import com.hunan.weizhang.service.WzHunanService;
 import com.hunan.weizhang.service.weizhang.HubeiWeizhangService;
+import com.hunan.weizhang.utils.ThreadPoolManagerFactory;
 
 /**
  * title：查询违章信息
@@ -76,7 +77,11 @@ public class WeizhangResult extends BaseActivity {
             car = (CarInfo) intent.getSerializableExtra("carInfo");
             telephone = intent.getStringExtra("telephone");
         }
-        step4(weizhangMessage, car, verificationCode, telephone);
+        
+        ThreadPoolManagerFactory.getInstance().execute(
+                new SearchWeizhangMessageRunable(weizhangMessage, car, verificationCode, telephone));
+        
+//        step4(weizhangMessage, car, verificationCode, telephone);
 
         // 查询内容: 车牌
         TextView query_chepai = (TextView) findViewById(R.id.query_chepai);
@@ -89,45 +94,85 @@ public class WeizhangResult extends BaseActivity {
         }
     }
     
-//    public class  SearchWeizhangMessageTask extends AsyncTask<Object, Object, Object> {
-//        
-//    }
-    
-    
-    public void step4(final WeizhangMessage  weizhangMessage, final CarInfo car, 
-            final VerificationCode verificationCode, final String telephone) {
-        // 声明一个子线程
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    //切换成湖北
-                    WeizhangService weizhangService = new HubeiWeizhangService(weizhangHistoryService);
-                    
-                    WeizhangMessage newWeizhangMessage = weizhangMessage;
-                    if (newWeizhangMessage == null) {
-                        newWeizhangMessage = new WeizhangMessage();
-                        newWeizhangMessage.setCarInfo(car);
-                    }
-                    
-                    newWeizhangMessage = weizhangService.searchWeizhangMessage(newWeizhangMessage);
-                    
-                    if (weizhangMessage == null 
-                            &&newWeizhangMessage != null 
-                            && WeizhangMessage.SUCCESS_CODE.equals(newWeizhangMessage.getCode())) {
-                        // 从业务服务器获取信息(从历史记录进入则不需要)
-                        WzHunanService.queryWeizhang(car, telephone);
-                    }
-                    
-                    // 高速UI线程可以更新结果了
-                    info = newWeizhangMessage;
-                    cwjHandler.post(mUpdateResults); 
-                } catch (Exception e) {
-                    e.printStackTrace();
+    public class SearchWeizhangMessageRunable implements Runnable {
+        
+        private WeizhangMessage  weizhangMessage;
+        private CarInfo car; 
+        private VerificationCode verificationCode;
+        private String telephone;
+        
+        public SearchWeizhangMessageRunable(WeizhangMessage  weizhangMessage, CarInfo car, 
+            VerificationCode verificationCode, String telephone) {
+            this.weizhangMessage = weizhangMessage;
+            this.car = car;
+            this.verificationCode = verificationCode;
+            this.telephone = telephone;
+        }
+        
+        @Override
+        public void run() {
+            try {
+                //切换成湖北
+                WeizhangService weizhangService = new HubeiWeizhangService(weizhangHistoryService);
+                
+                WeizhangMessage newWeizhangMessage = weizhangMessage;
+                if (newWeizhangMessage == null) {
+                    newWeizhangMessage = new WeizhangMessage();
+                    newWeizhangMessage.setCarInfo(car);
                 }
+                
+                newWeizhangMessage = weizhangService.searchWeizhangMessage(newWeizhangMessage);
+                
+                if (weizhangMessage == null 
+                        &&newWeizhangMessage != null 
+                        && WeizhangMessage.SUCCESS_CODE.equals(newWeizhangMessage.getCode())) {
+                    // 从业务服务器获取信息(从历史记录进入则不需要)
+                    WzHunanService.queryWeizhang(car, telephone);
+                }
+                
+                // 高速UI线程可以更新结果了
+                info = newWeizhangMessage;
+                cwjHandler.post(mUpdateResults); 
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        }.start();
+        }
     }
+    
+//    public void step4(final WeizhangMessage  weizhangMessage, final CarInfo car, 
+//            final VerificationCode verificationCode, final String telephone) {
+//        // 声明一个子线程
+//        new Thread() {
+//            @Override
+//            public void run() {
+//                try {
+//                    //切换成湖北
+//                    WeizhangService weizhangService = new HubeiWeizhangService(weizhangHistoryService);
+//                    
+//                    WeizhangMessage newWeizhangMessage = weizhangMessage;
+//                    if (newWeizhangMessage == null) {
+//                        newWeizhangMessage = new WeizhangMessage();
+//                        newWeizhangMessage.setCarInfo(car);
+//                    }
+//                    
+//                    newWeizhangMessage = weizhangService.searchWeizhangMessage(newWeizhangMessage);
+//                    
+//                    if (weizhangMessage == null 
+//                            &&newWeizhangMessage != null 
+//                            && WeizhangMessage.SUCCESS_CODE.equals(newWeizhangMessage.getCode())) {
+//                        // 从业务服务器获取信息(从历史记录进入则不需要)
+//                        WzHunanService.queryWeizhang(car, telephone);
+//                    }
+//                    
+//                    // 高速UI线程可以更新结果了
+//                    info = newWeizhangMessage;
+//                    cwjHandler.post(mUpdateResults); 
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }.start();
+//    }
     
     final Runnable mUpdateResults = new Runnable() {
         public void run() {
