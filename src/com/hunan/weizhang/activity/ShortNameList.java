@@ -1,5 +1,6 @@
 package com.hunan.weizhang.activity;
 
+import com.hunan.weizhang.model.ChepaiShortName;
 import com.sprzny.hubei.R;
 import android.app.Activity;
 import android.content.Intent;
@@ -20,10 +21,6 @@ public class ShortNameList extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        //获取传过来的城市
-//        Bundle bundle = getIntent().getExtras();
-//        final String short_name = bundle.getString("select_short_name");
-            
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.csy_activity_shortname);
@@ -45,7 +42,7 @@ public class ShortNameList extends Activity {
         //省份简称列表
         gv = (GridView) findViewById(R.id.gv_1);
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                R.layout.csy_listitem_shortname, getDate());
+                R.layout.csy_listitem_shortname, ChepaiShortName.allShortName);
         gv.setAdapter(adapter);
         gv.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -62,11 +59,5 @@ public class ShortNameList extends Activity {
             }
         });
 
-    }
-
-    private String[] getDate() {
-        return new String[] { "京", "津", "沪", "川", "鄂", "甘", "赣", "桂", "贵", "黑",
-                "吉", "冀", "晋", "辽", "鲁", "蒙", "闽", "宁", "青", "琼", "陕", "苏",
-                "皖", "湘", "新", "渝", "豫", "粤", "云", "藏", "浙", ""};
     }
 }

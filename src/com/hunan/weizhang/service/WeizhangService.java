@@ -3,6 +3,7 @@ package com.hunan.weizhang.service;
 import java.util.Date;
 
 import com.hunan.weizhang.model.CarInfo;
+import com.hunan.weizhang.model.VerificationCode;
 import com.hunan.weizhang.model.WeizhangMessage;
 
 public abstract class WeizhangService {
@@ -19,7 +20,8 @@ public abstract class WeizhangService {
      * @param weizhangMessage
      * @return
      */
-    public WeizhangMessage searchWeizhangMessage(WeizhangMessage weizhangMessage) {
+    public WeizhangMessage searchWeizhangMessage(WeizhangMessage weizhangMessage,
+            VerificationCode verificationCode) {
         if (weizhangMessage == null) {
             return null;
         }
@@ -33,7 +35,7 @@ public abstract class WeizhangService {
         
         // 从服务器上查询结果
         WeizhangMessage newWeizhangMessage = searchWeizhangMessage(weizhangMessage.getCarInfo(), 
-                isFromHistory);
+                isFromHistory, verificationCode);
         
         // 如果查询失败
         if (newWeizhangMessage == null 
@@ -67,5 +69,6 @@ public abstract class WeizhangService {
      * @param carInfo
      * @return
      */
-    public abstract WeizhangMessage searchWeizhangMessage(CarInfo carInfo, boolean isFromHistory);
+    public abstract WeizhangMessage searchWeizhangMessage(CarInfo carInfo, 
+            boolean isFromHistory, VerificationCode verificationCode);
 }

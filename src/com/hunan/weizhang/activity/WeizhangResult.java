@@ -1,7 +1,6 @@
 package com.hunan.weizhang.activity;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -78,10 +77,9 @@ public class WeizhangResult extends BaseActivity {
             telephone = intent.getStringExtra("telephone");
         }
         
+        // 启动新线程查询违章信息
         ThreadPoolManagerFactory.getInstance().execute(
                 new SearchWeizhangMessageRunable(weizhangMessage, car, verificationCode, telephone));
-        
-//        step4(weizhangMessage, car, verificationCode, telephone);
 
         // 查询内容: 车牌
         TextView query_chepai = (TextView) findViewById(R.id.query_chepai);
@@ -112,7 +110,7 @@ public class WeizhangResult extends BaseActivity {
         @Override
         public void run() {
             try {
-                //切换成湖北
+                // 切换成湖北
                 WeizhangService weizhangService = new HubeiWeizhangService(weizhangHistoryService);
                 
                 WeizhangMessage newWeizhangMessage = weizhangMessage;
@@ -121,7 +119,7 @@ public class WeizhangResult extends BaseActivity {
                     newWeizhangMessage.setCarInfo(car);
                 }
                 
-                newWeizhangMessage = weizhangService.searchWeizhangMessage(newWeizhangMessage);
+                newWeizhangMessage = weizhangService.searchWeizhangMessage(newWeizhangMessage, verificationCode);
                 
                 if (weizhangMessage == null 
                         &&newWeizhangMessage != null 

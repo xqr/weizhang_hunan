@@ -24,6 +24,7 @@ import com.hunan.weizhang.utils.NetUtil;
 import com.sprzny.hubei.R;
 
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
@@ -110,8 +111,9 @@ public class IndexActivity extends BaseActivity implements LocationHelper {
 //        // 初始化验证码
 //        try {
 //            AssetManager am=getAssets();
-//            InputStream is=am.open("code.txt");
+//            InputStream is=am.open("hunancode.txt");
 //            QrCodeExample.init(is);
+//            am.close();
 //        } catch (IOException e) {
 //            
 //        }
