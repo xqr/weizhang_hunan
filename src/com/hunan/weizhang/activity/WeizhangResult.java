@@ -139,47 +139,15 @@ public class WeizhangResult extends BaseActivity {
         }
     }
     
-//    public void step4(final WeizhangMessage  weizhangMessage, final CarInfo car, 
-//            final VerificationCode verificationCode, final String telephone) {
-//        // 声明一个子线程
-//        new Thread() {
-//            @Override
-//            public void run() {
-//                try {
-//                    //切换成湖北
-//                    WeizhangService weizhangService = new HubeiWeizhangService(weizhangHistoryService);
-//                    
-//                    WeizhangMessage newWeizhangMessage = weizhangMessage;
-//                    if (newWeizhangMessage == null) {
-//                        newWeizhangMessage = new WeizhangMessage();
-//                        newWeizhangMessage.setCarInfo(car);
-//                    }
-//                    
-//                    newWeizhangMessage = weizhangService.searchWeizhangMessage(newWeizhangMessage);
-//                    
-//                    if (weizhangMessage == null 
-//                            &&newWeizhangMessage != null 
-//                            && WeizhangMessage.SUCCESS_CODE.equals(newWeizhangMessage.getCode())) {
-//                        // 从业务服务器获取信息(从历史记录进入则不需要)
-//                        WzHunanService.queryWeizhang(car, telephone);
-//                    }
-//                    
-//                    // 高速UI线程可以更新结果了
-//                    info = newWeizhangMessage;
-//                    cwjHandler.post(mUpdateResults); 
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }.start();
-//    }
-    
     final Runnable mUpdateResults = new Runnable() {
         public void run() {
             updateUI();
         }
     };
-
+    
+    /**
+     * 展示违章结果
+     */
     private void updateUI() {
         TextView result_null = (TextView) findViewById(R.id.result_null);
         TextView result_title = (TextView) findViewById(R.id.result_title);

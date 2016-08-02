@@ -159,7 +159,7 @@ public class IndexActivity extends BaseActivity implements LocationHelper {
         protected Boolean doInBackground(String... params) {
             String prov = params[0];
             if (prov == null || TextUtils.isEmpty(prov)) {
-                prov = "湖北";
+                return false;
             }
             
             OilPriceInfo oilPrice = OilPriceApiClient.SearchOilPrice(prov);
@@ -169,7 +169,7 @@ public class IndexActivity extends BaseActivity implements LocationHelper {
             
             publishProgress(oilPrice);
             
-            return null;
+            return true;
         }
         
         @Override
