@@ -1,7 +1,5 @@
 package com.hunan.weizhang.activity;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,10 +10,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
-import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
-import com.baidu.location.LocationClientOption.LocationMode;
 import com.hunan.weizhang.adapter.HistoryListAdapter;
 import com.hunan.weizhang.api.client.OilPriceApiClient;
 import com.hunan.weizhang.api.client.WeatherApiClient;
@@ -23,14 +17,12 @@ import com.hunan.weizhang.model.LatLng;
 import com.hunan.weizhang.model.OilPriceInfo;
 import com.hunan.weizhang.model.WeatherInfo;
 import com.hunan.weizhang.model.WeizhangMessage;
-import com.hunan.weizhang.qrcode.QrCodeExample;
 import com.hunan.weizhang.service.WeizhangHistoryService;
 import com.hunan.weizhang.utils.LocationHelper;
 import com.hunan.weizhang.utils.LocationUtils;
 import com.hunan.weizhang.utils.NetUtil;
 import com.sprzny.shanghai.R;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;

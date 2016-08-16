@@ -209,6 +209,11 @@ public class MainActivity extends BaseActivity {
             Toast.makeText(MainActivity.this, "您输入的车牌号有误", Toast.LENGTH_SHORT).show();
             return false;
         }
+        if (car.getChepaiNo().charAt(1) < 'A' 
+                || car.getChepaiNo().charAt(1) > 'Z') {
+            Toast.makeText(MainActivity.this, "您输入的车牌号有误", Toast.LENGTH_SHORT).show();
+            return false;
+        }
         
       //发动机
         if (car.getEngineNo().equals("")) {
