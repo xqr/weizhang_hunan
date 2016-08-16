@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.sprzny.shanghai.R;
 import com.hunan.weizhang.model.WeizhangInfo;
+import com.sprzny.shanghai.R;
 
 public class WeizhangResponseAdapter extends BaseAdapter {
 

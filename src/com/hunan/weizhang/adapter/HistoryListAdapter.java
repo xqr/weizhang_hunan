@@ -2,8 +2,8 @@ package com.hunan.weizhang.adapter;
 
 import java.util.List;
 
-import com.sprzny.shanghai.R;
 import com.hunan.weizhang.model.WeizhangMessage;
+import com.sprzny.shanghai.R;
 
 import android.content.Context;
 import android.text.Html;

@@ -3,13 +3,10 @@ package com.hunan.weizhang.service;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
-
 import com.hunan.weizhang.model.CarInfo;
 import com.hunan.weizhang.model.WeizhangMessage;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -19,6 +16,8 @@ import android.util.Log;
 public class WeizhangHistoryService {
     private Context context;
     private int maxCount = 6;
+    
+    private static List<WeizhangMessage> currentWeizhangMessage = null;
     
     public WeizhangHistoryService(Context context) {
         this.context = context;
@@ -30,6 +29,8 @@ public class WeizhangHistoryService {
     }
     
     public void saveHistory(List<WeizhangMessage> historyList) {
+        currentWeizhangMessage = historyList;
+        
         StringWriter str=new StringWriter();
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -57,10 +58,10 @@ public class WeizhangHistoryService {
         historyList.add(weizhangMessage);
         
         int count = 1;
-        for (int i = 0; i < list.size(); i++) {
-            WeizhangMessage history = list.get(i);
+        for (WeizhangMessage history : list) {
             CarInfo oldCar = history.getCarInfo();
             CarInfo car = weizhangMessage.getCarInfo();
+            
             if (!(oldCar.getChepaiNo().equals(car.getChepaiNo()))
                     && count < maxCount) {
                 historyList.add(history);
@@ -78,7 +79,6 @@ public class WeizhangHistoryService {
         }
         for (WeizhangMessage weizhangMessage : list) {
             CarInfo  oldCar = weizhangMessage.getCarInfo();
-            //  weizhangMessage.getCarInfo().equals(car)
             if (oldCar.getChepaiNo().equals(car.getChepaiNo()) 
                     && oldCar.getEngineNo().equals(car.getEngineNo())) {
                 return weizhangMessage;
@@ -88,6 +88,10 @@ public class WeizhangHistoryService {
     }
     
     public List<WeizhangMessage> getHistory() {
+        if (currentWeizhangMessage != null) {
+            return currentWeizhangMessage;
+        }
+        
         SharedPreferences sp =context.getSharedPreferences("weizhang_history_strs", 0);
         String content = sp.getString("history", "");
         if (TextUtils.isEmpty(content)) {
@@ -101,6 +105,7 @@ public class WeizhangHistoryService {
                 for (JsonNode node : jsonNode) {
                     list.add(mapper.readValue(node, WeizhangMessage.class));
                 }
+                currentWeizhangMessage = list;
                 return list;
             }
         } catch (Exception e) {
@@ -110,10 +115,13 @@ public class WeizhangHistoryService {
         return null;
     }
     
+    
     public void deleteHistory() {
         SharedPreferences sp =context.getSharedPreferences("weizhang_history_strs", 0);
         Editor editor=sp.edit();
         editor.putString("history", "");
         editor.commit();
+        
+        currentWeizhangMessage = new ArrayList<WeizhangMessage>();
     }
 }

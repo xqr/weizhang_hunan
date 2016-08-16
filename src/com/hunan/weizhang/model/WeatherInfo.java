@@ -83,13 +83,13 @@ public class WeatherInfo implements Serializable {
             return R.drawable.w_mai;
         } else if (type.equals("暴雪")) {
             return R.drawable.w_baoxue;
-        } else if (type.equals(" 暴雨")) {
+        } else if (type.equals("暴雨")) {
             return R.drawable.w_baoyu;
-        } else if (type.equals("暴雨-大暴雨")) {
+        } else if (type.equals("暴雨到大暴雨")) {
             return R.drawable.w_baoyu_dabaoyu;
         } else if (type.equals("大暴雨")) {
             return R.drawable.w_dabaoyu;
-        } else if (type.equals("大暴雨-特大暴雨")) {
+        } else if (type.equals("大暴雨到特大暴雨")) {
             return R.drawable.w_dabaoyu_tedabaoyu;
         } else if (type.equals("大雪")) {
             return R.drawable.w_daxue;

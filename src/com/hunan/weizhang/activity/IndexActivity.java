@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import com.baidu.location.BDLocation;
@@ -24,6 +25,9 @@ import com.hunan.weizhang.model.WeatherInfo;
 import com.hunan.weizhang.model.WeizhangMessage;
 import com.hunan.weizhang.qrcode.QrCodeExample;
 import com.hunan.weizhang.service.WeizhangHistoryService;
+import com.hunan.weizhang.utils.LocationHelper;
+import com.hunan.weizhang.utils.LocationUtils;
+import com.hunan.weizhang.utils.NetUtil;
 import com.sprzny.shanghai.R;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -42,7 +46,7 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Toast;
 
-public class IndexActivity extends BaseActivity {
+public class IndexActivity extends BaseActivity implements LocationHelper {
     // 用户位置定位
     private String defaultCityName = "上海"; 
     private String provName = "上海";
@@ -50,8 +54,8 @@ public class IndexActivity extends BaseActivity {
     private TextView mDingweiCity;
     private LatLng latLng = null;
     
-    public LocationClient mLocationClient = null;
-    public BDLocationListener myListener = new MyLocationListener();
+    // 定位类
+    public LocationUtils mLocationUtils;
     
     // 天气View
     private TextView mWeatherTmp;
@@ -99,22 +103,23 @@ public class IndexActivity extends BaseActivity {
         new SearchHistoryTask().execute();
         
         // 定位城市
-        if (cityName == null || cityName.length() == 0 || latLng == null) {
-            mLocationClient = new LocationClient(getApplicationContext());     //声明LocationClient类
-            mLocationClient.registerLocationListener( myListener );    //注册监听函数
-            initLocation();
-            mLocationClient.start();
+        if (cityName == null 
+                || cityName.length() == 0 
+                || latLng == null
+                || provName == null 
+                || provName.length() == 0) {
+            mLocationUtils = new LocationUtils(this);
+            mLocationUtils.initLocationListener(this);
         } else {
-            // 查询天气
-            mDingweiCity.setText(cityName);
-            new WeatherTask().execute(cityName);
+            showCityWeatherAndOilPrice(cityName, provName);
         }
 //        
 //        // 初始化验证码
 //        try {
 //            AssetManager am=getAssets();
-//            InputStream is=am.open("code.txt");
+//            InputStream is=am.open("hunancode.txt");
 //            QrCodeExample.init(is);
+//            am.close();
 //        } catch (IOException e) {
 //            
 //        }
@@ -143,7 +148,7 @@ public class IndexActivity extends BaseActivity {
        c.setTime(date); 
        //今天是这个星期的第几天 
        int week=c.get(Calendar.DAY_OF_WEEK); 
-       SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
+       SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日", Locale.CHINA);
        mXcDate.setText(sdf.format(date));
        try {
            mXcWeek.setText(weeks[week-1]);
@@ -317,7 +322,9 @@ public class IndexActivity extends BaseActivity {
                 }
                 
                 if (latLng == null) {
-                    Toast.makeText(IndexActivity.this, "定位失败，请稍后重试", Toast.LENGTH_LONG).show();
+                    // 再次尝试定位
+                    mLocationUtils.initLocationListener(IndexActivity.this);
+                    Toast.makeText(IndexActivity.this, "请确保网络开启状态，正在定位中……", Toast.LENGTH_LONG).show();
                     return;
                 }
                 
@@ -353,67 +360,60 @@ public class IndexActivity extends BaseActivity {
         return data_list;
     }
     
-    /**
-     * 初始化配置
-     */
-    private void initLocation() {
-        LocationClientOption option = new LocationClientOption();
-        option.setLocationMode(LocationMode.Device_Sensors);//可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
-        option.setCoorType("bd09ll");//可选，默认gcj02，设置返回的定位结果坐标系
-        int span=0;
-        option.setScanSpan(span);//可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
-        option.setIsNeedAddress(true);//可选，设置是否需要地址信息，默认不需要
-        option.setOpenGps(true);//可选，默认false,设置是否使用gps
-        option.setLocationNotify(false);//可选，默认false，设置是否当gps有效时按照1S1次频率输出GPS结果
-        option.setIsNeedLocationDescribe(false);//可选，默认false，设置是否需要位置语义化结果，可以在BDLocation.getLocationDescribe里得到，结果类似于“在北京天安门附近”
-        option.setIsNeedLocationPoiList(false);//可选，默认false，设置是否需要POI结果，可以在BDLocation.getPoiList里得到
-        option.setIgnoreKillProcess(true);//可选，默认true，定位SDK内部是一个SERVICE，并放到了独立进程，设置是否在stop的时候杀死这个进程，默认不杀死  
-        option.SetIgnoreCacheException(false);//可选，默认false，设置是否收集CRASH信息，默认收集
-        option.setEnableSimulateGps(false);//可选，默认false，设置是否需要过滤gps仿真结果，默认需要
-        mLocationClient.setLocOption(option);
+    @Override
+    public void updateLocation(BDLocation location) {
+        if (location.getLocType() == BDLocation.TypeGpsLocation
+                || location.getLocType() == BDLocation.TypeNetWorkLocation
+                || location.getLocType() == BDLocation.TypeOffLineLocation) {
+            String city = location.getCity();
+            latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            if (city == null || city.isEmpty()) {
+                showCityWeatherAndOilPrice(defaultCityName, provName);
+                return;
+            }
+            
+            if (city.endsWith("市")) {
+                cityName = city.substring(0, city.length() - 1);
+            } else {
+                cityName = city;
+            }
+            String prov = location.getProvince();
+            if (prov != null && !prov.isEmpty()) {
+                if (prov.endsWith("省") || prov.endsWith("市")) {
+                    provName = prov.substring(0, prov.length() - 1);
+                } else {
+                    provName = prov;
+                }
+            }
+            // 定位成功，停止定位
+            if (latLng != null) {
+                mLocationUtils.removeLocationListener();
+            }
+            showCityWeatherAndOilPrice(cityName, provName);
+        }
     }
     
-    public class MyLocationListener implements BDLocationListener {
-        
-        @Override
-        public void onReceiveLocation(BDLocation location) {
-            
-            if (location.getLocType() == BDLocation.TypeGpsLocation
-                    || location.getLocType() == BDLocation.TypeNetWorkLocation
-                    || location.getLocType() == BDLocation.TypeOffLineLocation) {
-                String city = location.getCity();
-                latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                if (city == null || city.isEmpty()) {
-                    mDingweiCity.setText(defaultCityName);
-                    new WeatherTask().execute(defaultCityName);
-                    return;
-                }
-                if (city.endsWith("市")) {
-                    cityName = city.substring(0, city.length() - 1);
-                } else {
-                    cityName = city;
-                }
-                String prov = location.getProvince();
-                if (prov != null && !prov.isEmpty()) {
-                    if (prov.endsWith("省") || prov.endsWith("市")) {
-                        provName = prov.substring(0, prov.length() - 1);
-                    } else {
-                        provName = prov;
-                    }
-                }
-                
-                mDingweiCity.setText(cityName);
-                new WeatherTask().execute(cityName);
-                new OilPriceTask().execute(provName);
-            }
+    /**
+     * 定位成功后，显示与定位相关信息
+     * 
+     * @param cityName
+     * @param provName
+     */
+    private void showCityWeatherAndOilPrice(String cityName, String provName) {
+        mDingweiCity.setText(cityName);
+        // 检查网络情况
+        if (!NetUtil.checkNet(this)) {
+            Toast.makeText(IndexActivity.this, "网络连接不可用", Toast.LENGTH_LONG).show();
+            return;
         }
+        new WeatherTask().execute(cityName);
+        new OilPriceTask().execute(provName);
     }
     
     @Override
     protected void onDestroy() {
-        if (mLocationClient != null 
-                && mLocationClient.isStarted()) {
-            mLocationClient.stop();
+        if (mLocationUtils != null ) {
+            mLocationUtils.removeLocationListener();
         }
         super.onDestroy();
     }
