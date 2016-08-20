@@ -82,6 +82,7 @@ public class NearActivity extends BaseActivity {
             }
         }
         
+        @SuppressWarnings("deprecation")
         private boolean startNativeBaidu(LatLng destination) {
             try {            
                 Intent newIntent = Intent

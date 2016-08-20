@@ -1,7 +1,5 @@
 package com.hunan.weizhang.model;
 
-import java.io.Serializable;
-
 public class DetailInfo {
     private int distance;
     private String tag;

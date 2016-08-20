@@ -3,7 +3,7 @@ package com.hunan.weizhang.model;
 import java.io.Serializable;
 
 /**
- * 坐标对象
+ * 坐标对象（经纬度）
  */
 public class LatLng implements Serializable {
     

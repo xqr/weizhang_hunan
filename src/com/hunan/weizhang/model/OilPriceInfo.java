@@ -1,5 +1,9 @@
 package com.hunan.weizhang.model;
 
+/**
+ * 油价信息
+ *
+ */
 public class OilPriceInfo {
     private String prov;
     private String p90;

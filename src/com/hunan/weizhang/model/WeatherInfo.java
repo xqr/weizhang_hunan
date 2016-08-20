@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 import com.sprzny.hubei.R;
 
+/**
+ * 天气信息
+ */
 public class WeatherInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;

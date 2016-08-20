@@ -2,6 +2,9 @@ package com.hunan.weizhang.model;
 
 import java.io.Serializable;
 
+/**
+ * 违章详细信息
+ */
 public class WeizhangInfo implements Serializable {
     
     private static final long serialVersionUID = 1L;

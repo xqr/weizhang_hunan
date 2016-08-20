@@ -17,6 +17,11 @@ public class CarInfo implements Serializable {
      */
     private String engineNo;
     /**
+     * 车架号
+     */
+    private String chejiaNo;
+    
+    /**
      * 号牌种类
      */
     private String haopaiType;
@@ -39,5 +44,11 @@ public class CarInfo implements Serializable {
     }
     public void setEngineNo(String engineNo) {
         this.engineNo = engineNo;
+    }
+    public String getChejiaNo() {
+        return chejiaNo;
+    }
+    public void setChejiaNo(String chejiaNo) {
+        this.chejiaNo = chejiaNo;
     }
 }
