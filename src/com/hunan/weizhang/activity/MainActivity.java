@@ -22,6 +22,7 @@ import com.hunan.weizhang.api.client.WeizhangApiClient;
 import com.hunan.weizhang.model.CarInfo;
 import com.hunan.weizhang.model.VerificationCode;
 import com.hunan.weizhang.qrcode.QrCodeExample;
+import com.hunan.weizhang.service.AllCapTransformationMethod;
 
 public class MainActivity extends BaseActivity {
     
@@ -41,8 +42,8 @@ public class MainActivity extends BaseActivity {
     private EditText engine_number;
     private EditText telephone_number;
     
-    // 验证码对象
-    private VerificationCode verificationCode;
+//     验证码对象
+//    private VerificationCode verificationCode;
     
     // 行驶证图示
     private View popXSZ;
@@ -76,6 +77,10 @@ public class MainActivity extends BaseActivity {
         telephone_number = (EditText) findViewById(R.id.telephone_number);
         // ----------------------------------------------
         
+        // 增加字母大小监控转换
+        chepai_number.setTransformationMethod(new AllCapTransformationMethod());
+        engine_number.setTransformationMethod(new AllCapTransformationMethod());
+        
         // 默认选中小汽车
         haopai_lx.setSelection(1, true);
         
@@ -90,18 +95,18 @@ public class MainActivity extends BaseActivity {
             }
         });
         
-        btn_cpsz.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(MainActivity.this, ShortNameList.class);
-                String shortNameStr = short_name.getText().toString().trim();
-                if (shortNameStr == null || shortNameStr.isEmpty()) {
-                    shortNameStr = "湘";
-                }
-                intent.putExtra("select_short_name", shortNameStr);
-                startActivityForResult(intent, 0);
-            }
-        });
+//        btn_cpsz.setOnClickListener(new OnClickListener() {
+//            public void onClick(View v) {
+//                Intent intent = new Intent();
+//                intent.setClass(MainActivity.this, ShortNameList.class);
+//                String shortNameStr = short_name.getText().toString().trim();
+//                if (shortNameStr == null || shortNameStr.isEmpty()) {
+//                    shortNameStr = "湘";
+//                }
+//                intent.putExtra("select_short_name", shortNameStr);
+//                startActivityForResult(intent, 0);
+//            }
+//        });
 
         btn_query.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -133,7 +138,7 @@ public class MainActivity extends BaseActivity {
                 Intent intent = new Intent();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("carInfo", car);
-                bundle.putSerializable("verificationCode", verificationCode);
+//                bundle.putSerializable("verificationCode", verificationCode);
                 bundle.putString("telephone", telephoneNumberStr);
                 intent.putExtras(bundle);
                 
@@ -150,34 +155,34 @@ public class MainActivity extends BaseActivity {
         popXSZ.setOnTouchListener(new popOnTouchListener());
         hideShowXSZ();
         
-        // 获取验证码
-        new GetVerificationCodeTask().execute();
+//        // 获取验证码
+//        new GetVerificationCodeTask().execute();
     }
     
-    /**
-     * 获取验证码
-     */
-    public class GetVerificationCodeTask extends AsyncTask<Void, Void, Boolean> {
-        
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            int i = 1;
-            do {
-                verificationCode = WeizhangApiClient.getVerifCodeAction();
-                if (verificationCode != null) {
-                    String result = QrCodeExample.qrCode(verificationCode.getTpyzm());
-                    if (result == null || result.length() != 4) {
-                        verificationCode = null;
-                    } else {
-                        verificationCode.setRandCode(result);
-                    }
-                }
-                i++;
-            } while(verificationCode == null && i  <= 3);
-            
-            return true;
-        }
-    }
+//    /**
+//     * 获取验证码
+//     */
+//    public class GetVerificationCodeTask extends AsyncTask<Void, Void, Boolean> {
+//        
+//        @Override
+//        protected Boolean doInBackground(Void... params) {
+//            int i = 1;
+//            do {
+//                verificationCode = WeizhangApiClient.getVerifCodeAction();
+//                if (verificationCode != null) {
+//                    String result = QrCodeExample.qrCode(verificationCode.getTpyzm());
+//                    if (result == null || result.length() != 4) {
+//                        verificationCode = null;
+//                    } else {
+//                        verificationCode.setRandCode(result);
+//                    }
+//                }
+//                i++;
+//            } while(verificationCode == null && i  <= 3);
+//            
+//            return true;
+//        }
+//    }
     
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

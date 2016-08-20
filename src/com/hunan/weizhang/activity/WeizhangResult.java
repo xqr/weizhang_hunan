@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.sprzny.hunan.R;
 import com.hunan.weizhang.adapter.WeizhangResponseAdapter;
+import com.hunan.weizhang.api.client.HunanWeizhangApiClient;
 import com.hunan.weizhang.api.client.WeizhangApiClient;
 import com.hunan.weizhang.model.CarInfo;
 import com.hunan.weizhang.model.VerificationCode;
@@ -66,7 +67,7 @@ public class WeizhangResult extends BaseActivity {
         
         String flag = intent.getStringExtra("flag");
         CarInfo car = null;
-        VerificationCode verificationCode = null;
+//        VerificationCode verificationCode = null;
         String telephone = null;
         WeizhangMessage  weizhangMessage = null;
         if (flag != null && flag.equals("history")) {
@@ -74,10 +75,10 @@ public class WeizhangResult extends BaseActivity {
             car = weizhangMessage.getCarInfo();
         } else {
             car = (CarInfo) intent.getSerializableExtra("carInfo");
-            verificationCode = (VerificationCode) intent.getSerializableExtra("verificationCode");
+//            verificationCode = (VerificationCode) intent.getSerializableExtra("verificationCode");
             telephone = intent.getStringExtra("telephone");
         }
-        step4(weizhangMessage, car, verificationCode, telephone);
+        step4(weizhangMessage, car, null, telephone);
 
         // 查询内容: 车牌
         TextView query_chepai = (TextView) findViewById(R.id.query_chepai);
@@ -113,19 +114,20 @@ public class WeizhangResult extends BaseActivity {
                     // 从业务服务器获取信息
                     WzHunanService.queryWeizhang(car, telephone);
                     
-                    // 校验验证码正确性
-                    VerificationCode newVerificationCode = verificationCode;
-                    if (newVerificationCode == null 
-                            || newVerificationCode.getRandCode() == null) {
-                        newVerificationCode = getVerificationCode();
-                    }
+//                    // 校验验证码正确性
+//                    VerificationCode newVerificationCode = verificationCode;
+//                    if (newVerificationCode == null 
+//                            || newVerificationCode.getRandCode() == null) {
+//                        newVerificationCode = getVerificationCode();
+//                    }
                     
-                    newWeizhangMessage = WeizhangApiClient.toQueryVioltionByCarAction(car, newVerificationCode);
-                    //  验证码错误自动重试1次
-                    if (newWeizhangMessage != null && newWeizhangMessage.getMessage().equals("图片验证码有误")) {
-                        newVerificationCode = getVerificationCode();
-                        newWeizhangMessage = WeizhangApiClient.toQueryVioltionByCarAction(car, newVerificationCode);
-                    }
+//                    newWeizhangMessage = WeizhangApiClient.toQueryVioltionByCarAction(car, newVerificationCode);
+//                    //  验证码错误自动重试1次
+//                    if (newWeizhangMessage != null && newWeizhangMessage.getMessage().equals("图片验证码有误")) {
+//                        newVerificationCode = getVerificationCode();
+//                        newWeizhangMessage = WeizhangApiClient.toQueryVioltionByCarAction(car, newVerificationCode);
+//                    }
+                    newWeizhangMessage = HunanWeizhangApiClient.toQueryVioltionByCarAction(car);
                     // 查询成功，缓存结果
                     if (newWeizhangMessage != null && newWeizhangMessage.getCode().equals("1")) {
                         weizhangHistoryService.appendHistory(newWeizhangMessage);
@@ -139,28 +141,28 @@ public class WeizhangResult extends BaseActivity {
         }.start();
     }
 
-    /**
-     * 获取验证码
-     */
-    public VerificationCode getVerificationCode() {
-        int i = 1;
-        VerificationCode verificationCode = null;
-        do {
-            verificationCode = WeizhangApiClient.getVerifCodeAction();
-            if (verificationCode != null) {
-                String result = QrCodeExample.qrCode(verificationCode.getTpyzm());
-                if (result == null || result.length() != 4) {
-                    verificationCode = null;
-                } else {
-                    verificationCode.setRandCode(result);
-                }
-            }
-            i++;
-        } while(verificationCode == null && i  <= 3);
-        
-        return verificationCode;
-    }
-    
+//    /**
+//     * 获取验证码
+//     */
+//    public VerificationCode getVerificationCode() {
+//        int i = 1;
+//        VerificationCode verificationCode = null;
+//        do {
+//            verificationCode = WeizhangApiClient.getVerifCodeAction();
+//            if (verificationCode != null) {
+//                String result = QrCodeExample.qrCode(verificationCode.getTpyzm());
+//                if (result == null || result.length() != 4) {
+//                    verificationCode = null;
+//                } else {
+//                    verificationCode.setRandCode(result);
+//                }
+//            }
+//            i++;
+//        } while(verificationCode == null && i  <= 3);
+//        
+//        return verificationCode;
+//    }
+//    
     final Runnable mUpdateResults = new Runnable() {
         public void run() {
             updateUI();

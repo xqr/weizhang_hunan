@@ -9,11 +9,26 @@ public class WeizhangInfo implements Serializable {
     private String dsr;
     private String xh;
     private String zt;
+    /**
+     * 违法时间
+     */
     private String wfsj;
+    /**
+     * 违法地址(必填)
+     */
     private String wfdz;
     private String wfdm;
+    /**
+     * 违法行为
+     */
     private String wfxw;
+    /**
+     * 扣分
+     */
     private String wfjfs;
+    /**
+     * 罚款金额
+     */
     private String fkje;
     private String znj;
     private String jllx;
@@ -22,6 +37,29 @@ public class WeizhangInfo implements Serializable {
     private String wfjszh;
     private String fxjg;
     private String wsbj;
+    
+    public WeizhangInfo() {
+        
+    }
+    
+    /**
+     * 基本信息
+     * 
+     * @param wfsj 违法事件
+     * @param wfdz 违法地址
+     * @param wfxw 违法行为
+     * @param wfjfs 扣分
+     * @param fkje 罚款金额
+     */
+    public WeizhangInfo(String wfsj, String wfdz, String wfxw, String wfjfs, String fkje) {
+        this.wfsj = wfsj;
+        this.wfdz = wfdz;
+        this.wfxw = wfxw;
+        this.wfjfs = wfjfs;
+        this.fkje = fkje;
+    }
+    
+    
     public String getDsr() {
         return dsr;
     }

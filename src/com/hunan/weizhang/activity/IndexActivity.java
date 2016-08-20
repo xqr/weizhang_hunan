@@ -93,15 +93,15 @@ public class IndexActivity extends BaseActivity {
             mDingweiCity.setText(cityName);
             new WeatherTask().execute(cityName);
         }
-        
-        // 初始化验证码
-        try {
-            AssetManager am=getAssets();
-            InputStream is=am.open("code.txt");
-            QrCodeExample.init(is);
-        } catch (IOException e) {
-            
-        }
+//        
+//        // 初始化验证码
+//        try {
+//            AssetManager am=getAssets();
+//            InputStream is=am.open("code.txt");
+//            QrCodeExample.init(is);
+//        } catch (IOException e) {
+//            
+//        }
     }
     
    /**

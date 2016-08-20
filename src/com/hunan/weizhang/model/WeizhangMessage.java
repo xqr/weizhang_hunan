@@ -1,6 +1,7 @@
 package com.hunan.weizhang.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -10,11 +11,20 @@ import java.util.List;
 public class WeizhangMessage implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
+     * 接口查询成功Code
+     */
+    public final static String SUCCESS_CODE = "1";
+    /**
+     * 查询失败Code
+     */
+    public final static String ERROR_CODE = "0";
+    
+    /**
      * 返回消息
      */
     private String message;
     /**
-     * 返回码
+     * 返回码(成功=1)
      */
     private String code;
     /**
@@ -37,7 +47,7 @@ public class WeizhangMessage implements Serializable {
     /**
      * 查询时间
      */
-    private long searchTimestamp;
+    private long searchTimestamp = 0;
     /**
      * 车辆信息
      */
