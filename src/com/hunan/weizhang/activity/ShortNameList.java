@@ -1,7 +1,7 @@
 package com.hunan.weizhang.activity;
 
 import com.hunan.weizhang.model.ChepaiShortName;
-import com.sprzny.hubei.R;
+import com.sprzny.quanguo.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;

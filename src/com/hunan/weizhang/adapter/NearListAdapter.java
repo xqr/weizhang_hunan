@@ -3,7 +3,7 @@ package com.hunan.weizhang.adapter;
 import java.util.List;
 
 import com.hunan.weizhang.model.CustomSearchResultData;
-import com.sprzny.hubei.R;
+import com.sprzny.quanguo.R;
 
 import android.content.Context;
 import android.view.LayoutInflater;

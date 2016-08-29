@@ -2,6 +2,7 @@ package com.hunan.weizhang.activity;
 
 import java.util.Locale;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,7 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sprzny.hubei.R;
+import com.sprzny.quanguo.R;
 import com.hunan.weizhang.api.client.weizhang.HunanWeizhangApiClient;
 import com.hunan.weizhang.model.CarInfo;
 import com.hunan.weizhang.model.VerificationCode;
@@ -40,6 +41,7 @@ public class MainActivity extends BaseActivity {
     
     private EditText chepai_number;
     private EditText engine_number;
+    private EditText chejia_number;
     private EditText telephone_number;
     
     // 验证码对象
@@ -73,6 +75,7 @@ public class MainActivity extends BaseActivity {
         haopai_lx = (Spinner) findViewById(R.id.haopai_lx);
         chepai_number = (EditText) findViewById(R.id.chepai_number);
         engine_number = (EditText) findViewById(R.id.engine_number);
+        chejia_number = (EditText) findViewById(R.id.chejia_number);
         short_name = (TextView) findViewById(R.id.chepai_sz);
         telephone_number = (EditText) findViewById(R.id.telephone_number);
         // ----------------------------------------------
@@ -80,6 +83,7 @@ public class MainActivity extends BaseActivity {
         // 增加字母大小监控转换
         chepai_number.setTransformationMethod(new AllCapTransformationMethod());
         engine_number.setTransformationMethod(new AllCapTransformationMethod());
+        chejia_number.setTransformationMethod(new AllCapTransformationMethod());
         
         // 默认选中小汽车
         haopai_lx.setSelection(1, true);
@@ -101,7 +105,7 @@ public class MainActivity extends BaseActivity {
                 intent.setClass(MainActivity.this, ShortNameList.class);
                 String shortNameStr = short_name.getText().toString().trim();
                 if (shortNameStr == null || shortNameStr.isEmpty()) {
-                    shortNameStr = "湘";
+                    shortNameStr =  defaultChepai;
                 }
                 intent.putExtra("select_short_name", shortNameStr);
                 startActivityForResult(intent, 0);
@@ -117,12 +121,14 @@ public class MainActivity extends BaseActivity {
                 // 发动机和车牌字母必须大写
                 final String chepaiNumberStr = chepai_number.getText().toString().trim().toUpperCase(Locale.getDefault());
                 final String engineNumberStr = engine_number.getText().toString().trim().toUpperCase(Locale.getDefault());
+                final String chejiaNumberStr = chejia_number.getText().toString().trim().toUpperCase(Locale.getDefault());
                 final String telephoneNumberStr = telephone_number.getText().toString().trim();
                 final String  haopaiTypeStr = haopai_lx.getSelectedItem().toString();
 
                 // 车牌
                 car.setChepaiNo(shortNameStr + chepaiNumberStr);
                 car.setEngineNo(engineNumberStr);
+                car.setChejiaNo(chejiaNumberStr);
                 // 号牌类型
                 if (haopaiTypeStr.equals("小型汽车")) {
                     car.setHaopaiType("02");
@@ -205,6 +211,7 @@ public class MainActivity extends BaseActivity {
      * @return
      */
     private boolean checkQueryItem(CarInfo car) {
+        // 车牌号校验
         if (car.getChepaiNo().length() != 7) {
             Toast.makeText(MainActivity.this, "您输入的车牌号有误", Toast.LENGTH_SHORT).show();
             return false;
@@ -215,16 +222,19 @@ public class MainActivity extends BaseActivity {
             return false;
         }
         
-      //发动机
+        // TODO 发动机
         if (car.getEngineNo().equals("")) {
-            Toast.makeText(MainActivity.this, "输入车架号不为空", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "输入发动机好不为空", Toast.LENGTH_SHORT).show();
             return false;
         }
         
-        if (car.getEngineNo().length() < 5) {
-            Toast.makeText(MainActivity.this, "请输入车架号后5位", Toast.LENGTH_SHORT).show();
+        if (car.getEngineNo().length() < 6) {
+            Toast.makeText(MainActivity.this, "请输入发动机号后6位", Toast.LENGTH_SHORT).show();
             return false;
         }
+        
+        // TODO 车架校验
+        
         return true;
     }
     
@@ -250,6 +260,7 @@ public class MainActivity extends BaseActivity {
     /**
      *  避免穿透导致表单元素取得焦点
      */
+    @SuppressLint("ClickableViewAccessibility")
     private class popOnTouchListener implements OnTouchListener {
         @Override
         public boolean onTouch(View arg0, MotionEvent arg1) {

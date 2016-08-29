@@ -7,7 +7,7 @@ import com.hunan.weizhang.api.client.LbsSearchService;
 import com.hunan.weizhang.model.CustomSearchResultData;
 import com.hunan.weizhang.model.LatLng;
 import com.hunan.weizhang.utils.NetUtil;
-import com.sprzny.hubei.R;
+import com.sprzny.quanguo.R;
 
 import android.content.Intent;
 import android.os.AsyncTask;

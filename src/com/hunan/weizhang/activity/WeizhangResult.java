@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.sprzny.hubei.R;
+import com.sprzny.quanguo.R;
 import com.hunan.weizhang.adapter.WeizhangResponseAdapter;
 import com.hunan.weizhang.model.CarInfo;
 import com.hunan.weizhang.model.VerificationCode;
@@ -18,7 +18,7 @@ import com.hunan.weizhang.model.WeizhangMessage;
 import com.hunan.weizhang.service.WeizhangHistoryService;
 import com.hunan.weizhang.service.WeizhangService;
 import com.hunan.weizhang.service.WzHunanService;
-import com.hunan.weizhang.service.weizhang.HubeiWeizhangService;
+import com.hunan.weizhang.service.factory.WeizhangServiceFactory;
 import com.hunan.weizhang.utils.ThreadPoolManagerFactory;
 
 /**
@@ -110,14 +110,16 @@ public class WeizhangResult extends BaseActivity {
         @Override
         public void run() {
             try {
-                // 切换成湖北
-                WeizhangService weizhangService = new HubeiWeizhangService(weizhangHistoryService);
                 
                 WeizhangMessage newWeizhangMessage = weizhangMessage;
                 if (newWeizhangMessage == null) {
                     newWeizhangMessage = new WeizhangMessage();
                     newWeizhangMessage.setCarInfo(car);
                 }
+                
+                // 查询可用的违章服务
+                WeizhangService weizhangService = WeizhangServiceFactory.getInstance(newWeizhangMessage.getCarInfo(),
+                        weizhangHistoryService);
                 
                 newWeizhangMessage = weizhangService.searchWeizhangMessage(newWeizhangMessage, verificationCode);
                 

@@ -100,7 +100,7 @@
 
             <TextView
                 style="@style/csy_row_label"
-                android:text="@string/csy_chejia_lab" />
+                android:text="@string/csy_engine_lab" />
 
             <RelativeLayout
                 android:layout_width="fill_parent"
@@ -114,6 +114,33 @@
 
                 <ImageView
                     android:id="@+id/ico_engine"
+                    style="@style/csy_row_icon"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/csy_ico_help" />
+            </RelativeLayout>
+        </LinearLayout>
+        
+        <!-- 车架号 -->
+        <LinearLayout
+            android:id="@+id/row_chejia"
+            style="@style/csy_row1" >
+
+            <TextView
+                style="@style/csy_row_label"
+                android:text="@string/csy_chejia_lab" />
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/csy_item_h"
+                android:layout_gravity="center_vertical" >
+
+                <EditText
+                    android:id="@+id/chejia_number"
+                    style="@style/csy_textbox1" 
+                    android:hint="@string/csy_chejia_tip"/>
+
+                <ImageView
+                    android:id="@+id/ico_chejia"
                     style="@style/csy_row_icon"
                     android:contentDescription="@string/app_name"
                     android:src="@drawable/csy_ico_help" />

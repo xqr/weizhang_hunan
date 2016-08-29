@@ -2,7 +2,7 @@ package com.hunan.weizhang.adapter;
 
 import java.util.List;
 
-import com.sprzny.hubei.R;
+import com.sprzny.quanguo.R;
 import com.hunan.weizhang.model.WeizhangMessage;
 
 import android.content.Context;

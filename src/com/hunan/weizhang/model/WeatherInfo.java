@@ -2,7 +2,7 @@ package com.hunan.weizhang.model;
 
 import java.io.Serializable;
 
-import com.sprzny.hubei.R;
+import com.sprzny.quanguo.R;
 
 /**
  * 天气信息

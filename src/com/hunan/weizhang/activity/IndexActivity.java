@@ -21,7 +21,7 @@ import com.hunan.weizhang.service.WeizhangHistoryService;
 import com.hunan.weizhang.utils.LocationHelper;
 import com.hunan.weizhang.utils.LocationUtils;
 import com.hunan.weizhang.utils.NetUtil;
-import com.sprzny.hubei.R;
+import com.sprzny.quanguo.R;
 
 import android.content.Intent;
 import android.os.AsyncTask;
