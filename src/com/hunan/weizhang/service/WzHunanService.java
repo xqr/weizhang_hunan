@@ -38,4 +38,31 @@ public class WzHunanService {
         
         return HttpClientUtils.postResponse("http://wz.cs.cn/hunan/api", params, null);
     }
+    
+    /**
+     * 查询全国违章
+     * 
+     * @param car
+     * @return
+     */
+    public static String queryQuanguoWeizhang(CarInfo car) {        
+        Map<String, String> data = new HashMap<String, String>();
+        data.put("hphm", car.getChepaiNo());
+        data.put("engineno", car.getEngineNo());
+        data.put("classno", car.getChejiaNo());
+        
+        StringWriter str=new StringWriter();
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            mapper.writeValue(str, data);
+        } catch (Exception e) {
+            Log.e("error", e.getMessage());
+        }
+        
+        
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("data", Base64.encodeToString(str.toString().getBytes(), Base64.NO_WRAP));
+        
+        return HttpClientUtils.postResponse("http://wz.cs.cn/hunan/quanguo", params, null);
+    }
 }

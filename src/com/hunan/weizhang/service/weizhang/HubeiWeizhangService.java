@@ -28,11 +28,12 @@ public class HubeiWeizhangService extends WeizhangService {
             if (errorCode == 0) {
                 weizhangMessage.setCode(WeizhangMessage.ERROR_CODE);
                 weizhangMessage.setMessage("车辆信息输入有误");
+                return weizhangMessage;
             } else if (errorCode == 2) {
                 weizhangMessage.setCode(WeizhangMessage.ERROR_CODE);
                 weizhangMessage.setMessage("交管局系统连线忙碌中，请稍后再试");
+                return weizhangMessage;
             }
-            return weizhangMessage;
         }
         
         weizhangMessage = HubeiWeizhangApiClient.viomore(carInfo);

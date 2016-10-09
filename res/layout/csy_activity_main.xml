@@ -140,7 +140,7 @@
                     android:hint="@string/csy_chejia_tip"/>
 
                 <ImageView
-                    android:id="@+id/ico_chejia"
+                    android:id="@id/ico_engine"
                     style="@style/csy_row_icon"
                     android:contentDescription="@string/app_name"
                     android:src="@drawable/csy_ico_help" />

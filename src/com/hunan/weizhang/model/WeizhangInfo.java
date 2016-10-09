@@ -48,7 +48,7 @@ public class WeizhangInfo implements Serializable {
     /**
      * 基本信息
      * 
-     * @param wfsj 违法事件
+     * @param wfsj 违法时间
      * @param wfdz 违法地址
      * @param wfxw 违法行为
      * @param wfjfs 扣分

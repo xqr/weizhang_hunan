@@ -15,13 +15,16 @@ import com.hunan.weizhang.utils.HttpClientUtils;
 public class ShanghaiWeizhangApiClient {
     /**
      * 对接上海违章查询官网
+     * 查询方式：车牌号 + 发动机全称
      * 
      * @param car
      * @return
      */
     public static WeizhangMessage toQueryVioltionByCarAction(CarInfo car) {
+        String engineNo = car.getEngineNo();
+
         String url = String.format("http://my.eshimin.com/weizhang/electronbill/detail?account=%s&wzStatus=0&fdjh=%s",
-                car.getChepaiNo(), car.getEngineNo());
+                car.getChepaiNo(), engineNo);
         try {
             String content = HttpClientUtils.getResponse(url, null);
             if (TextUtils.isEmpty(content)) {
@@ -52,7 +55,7 @@ public class ShanghaiWeizhangApiClient {
                         weizhangInfo.setWfsj(sdf.format(date)); // 违法时间
                         weizhangInfo.setWfxw(node.get("xwsm").getTextValue()); // 违法行为
                         weizhangInfo.setWfdz(node.get("wfdz").getTextValue()); // 违法地址
-                        weizhangInfo.setWfjfs(String.valueOf(node.get("kf").getIntValue())); // 扣分
+                        weizhangInfo.setWfjfs(String.valueOf(node.get("kfsm").getIntValue())); // 扣分
                         weizhangInfo.setZt("0"); // 处理状态
                         
                         data.add(weizhangInfo);

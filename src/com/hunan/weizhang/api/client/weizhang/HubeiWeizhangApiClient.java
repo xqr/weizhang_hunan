@@ -19,14 +19,19 @@ public class HubeiWeizhangApiClient {
     
     /**
      * 校验参数是否合法
+     * 查询方式：车牌号+车架号后5位
      * 
-     * @param carInfo
+     * @param carInfo 
      * @return 1：正常，0：参数错误；2：服务器异常
      */
     public static int veh(CarInfo carInfo) {
         String jkxlh = MD5Utils.encodeByMD5(carInfo.getChepaiNo() + "veh");
+        String chejia = carInfo.getChejiaNo();
+        if (chejia.length() > 5) {
+            chejia = chejia.substring(chejia.length() - 5, chejia.length());
+        }
         String url = String.format("http://xxcx.hbsjg.gov.cn:8090/hbjjapp/veh/veh.do?hpzl=%s&hphm=%s&clsbdh=%s&jkxlh=%s",
-                carInfo.getHaopaiType(), carInfo.getChepaiNo(), carInfo.getEngineNo(), jkxlh);
+                carInfo.getHaopaiType(), carInfo.getChepaiNo(), chejia, jkxlh);
         
         try {
             String content = HttpClientUtils.getResponse(url, null);
@@ -43,6 +48,7 @@ public class HubeiWeizhangApiClient {
     
     /**
      * 查询违章信息
+     * 查询方式：车牌号
      * 
      * @param carInfo
      */
@@ -92,6 +98,8 @@ public class HubeiWeizhangApiClient {
                             resultJsonNode.get("WFXW").getTextValue(), 
                             String.valueOf(wfjfs), 
                             String.valueOf(fkje));
+                    // 设置处理状态
+                    weizhangInfo.setZt("0");
                     
                     weizhangList.add(weizhangInfo);
                 }

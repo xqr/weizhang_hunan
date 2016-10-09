@@ -13,8 +13,10 @@ import com.baidu.location.BDLocation;
 import com.hunan.weizhang.adapter.HistoryListAdapter;
 import com.hunan.weizhang.api.client.OilPriceApiClient;
 import com.hunan.weizhang.api.client.WeatherApiClient;
+import com.hunan.weizhang.model.ChepaiShortName;
 import com.hunan.weizhang.model.LatLng;
 import com.hunan.weizhang.model.OilPriceInfo;
+import com.hunan.weizhang.model.ShortName;
 import com.hunan.weizhang.model.WeatherInfo;
 import com.hunan.weizhang.model.WeizhangMessage;
 import com.hunan.weizhang.service.WeizhangHistoryService;
@@ -42,13 +44,17 @@ import android.widget.Toast;
 public class IndexActivity extends BaseActivity implements LocationHelper {
     // 用户位置定位
     private String defaultCityName = "武汉"; 
-    private String provName = "湖北";
+    private String defaultProvName = "湖北";
+    private String provName = null;
     private String cityName = null;
     private TextView mDingweiCity;
     private LatLng latLng = null;
     
     // 定位类
     public LocationUtils mLocationUtils;
+    
+    // 城市背景图
+    private RelativeLayout topBanner;
     
     // 天气View
     private TextView mWeatherTmp;
@@ -101,27 +107,21 @@ public class IndexActivity extends BaseActivity implements LocationHelper {
                 || latLng == null
                 || provName == null 
                 || provName.length() == 0) {
+            // 初始化城市定位
             mLocationUtils = new LocationUtils(this);
             mLocationUtils.initLocationListener(this);
         } else {
             showCityWeatherAndOilPrice(cityName, provName);
         }
-//        
-//        // 初始化验证码
-//        try {
-//            AssetManager am=getAssets();
-//            InputStream is=am.open("hunancode.txt");
-//            QrCodeExample.init(is);
-//            am.close();
-//        } catch (IOException e) {
-//            
-//        }
     }
     
    /**
     * 初始化天气模块控件
     */
    private void initWeather() {
+       // 天气模块背景图
+       topBanner = (RelativeLayout) findViewById(R.id.topBanner);
+       
        mWeatherTmp = (TextView) findViewById(R.id.weather_tmp);
        mWeatherIcon = (ImageView) findViewById(R.id.weather_icon);
        mWeatherWenzi = (TextView) findViewById(R.id.weather_wenzi);
@@ -160,7 +160,7 @@ public class IndexActivity extends BaseActivity implements LocationHelper {
         protected Boolean doInBackground(String... params) {
             String prov = params[0];
             if (prov == null || TextUtils.isEmpty(prov)) {
-                return false;
+                prov = defaultProvName;
             }
             
             OilPriceInfo oilPrice = OilPriceApiClient.SearchOilPrice(prov);
@@ -287,8 +287,18 @@ public class IndexActivity extends BaseActivity implements LocationHelper {
      * 
      * @param v
      */
-    public void weizhangClick(View v){
+    public void weizhangClick(View v) {
         Intent intent = new Intent();
+        
+        // 传递省份参数
+        Bundle bundle = new Bundle();
+        if (provName != null && !provName.isEmpty()) {
+            bundle.putString("provName", provName);
+        } else {
+            bundle.putString("provName", defaultProvName);
+        }
+        intent.putExtras(bundle);
+        
         // 违章查询
         intent.setClass(IndexActivity.this, MainActivity.class);  
         startActivity(intent);
@@ -393,7 +403,21 @@ public class IndexActivity extends BaseActivity implements LocationHelper {
      * @param provName
      */
     private void showCityWeatherAndOilPrice(String cityName, String provName) {
-        mDingweiCity.setText(cityName);
+        if (cityName != null) {
+            mDingweiCity.setText(cityName);
+        } else {
+            mDingweiCity.setText(defaultCityName);
+        }
+        
+        // 设置天气的背景图
+        ShortName shortName = null;
+        if (provName != null) {
+            shortName = ChepaiShortName.getShortName(provName);
+        } else {
+            shortName = ChepaiShortName.getShortName(defaultProvName);
+        }
+        topBanner.setBackgroundResource(shortName.getBannerId());
+        
         // 检查网络情况
         if (!NetUtil.checkNet(this)) {
             Toast.makeText(IndexActivity.this, "网络连接不可用", Toast.LENGTH_LONG).show();

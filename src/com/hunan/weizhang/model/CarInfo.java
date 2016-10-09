@@ -9,7 +9,11 @@ import java.io.Serializable;
 public class CarInfo implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
-     * 车牌号
+     * 车牌字母
+     */
+    private String shortName;
+    /**
+     * 车牌号(完整车牌)
      */
     private String chepaiNo;
     /**
@@ -50,5 +54,11 @@ public class CarInfo implements Serializable {
     }
     public void setChejiaNo(String chejiaNo) {
         this.chejiaNo = chejiaNo;
+    }
+    public String getShortName() {
+        return shortName;
+    }
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 }

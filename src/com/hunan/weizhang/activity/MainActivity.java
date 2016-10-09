@@ -14,6 +14,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +22,8 @@ import android.widget.Toast;
 import com.sprzny.quanguo.R;
 import com.hunan.weizhang.api.client.weizhang.HunanWeizhangApiClient;
 import com.hunan.weizhang.model.CarInfo;
+import com.hunan.weizhang.model.ChepaiShortName;
+import com.hunan.weizhang.model.ShortName;
 import com.hunan.weizhang.model.VerificationCode;
 import com.hunan.weizhang.qrcode.QrCodeExample;
 import com.hunan.weizhang.service.AllCapTransformationMethod;
@@ -43,6 +46,10 @@ public class MainActivity extends BaseActivity {
     private EditText engine_number;
     private EditText chejia_number;
     private EditText telephone_number;
+    
+    // 发动机和车架号
+    private LinearLayout row_engine;
+    private LinearLayout row_chejia;
     
     // 验证码对象
     private VerificationCode verificationCode;
@@ -80,6 +87,10 @@ public class MainActivity extends BaseActivity {
         telephone_number = (EditText) findViewById(R.id.telephone_number);
         // ----------------------------------------------
         
+        // 发动机和车架号 
+        row_engine = (LinearLayout) findViewById(R.id.row_engine);
+        row_chejia = (LinearLayout) findViewById(R.id.row_chejia);
+        
         // 增加字母大小监控转换
         chepai_number.setTransformationMethod(new AllCapTransformationMethod());
         engine_number.setTransformationMethod(new AllCapTransformationMethod());
@@ -99,6 +110,7 @@ public class MainActivity extends BaseActivity {
             }
         });
         
+        // 车牌地区选择
         btn_cpsz.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -111,7 +123,8 @@ public class MainActivity extends BaseActivity {
                 startActivityForResult(intent, 0);
             }
         });
-
+        
+        // 查询按钮
         btn_query.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 // 获取违章信息
@@ -126,6 +139,7 @@ public class MainActivity extends BaseActivity {
                 final String  haopaiTypeStr = haopai_lx.getSelectedItem().toString();
 
                 // 车牌
+                car.setShortName(shortNameStr);
                 car.setChepaiNo(shortNameStr + chepaiNumberStr);
                 car.setEngineNo(engineNumberStr);
                 car.setChejiaNo(chejiaNumberStr);
@@ -153,8 +167,10 @@ public class MainActivity extends BaseActivity {
             }
         });
         
-        // 默认为湘
-        short_name.setText(defaultChepai);
+        // 设置默认车牌号
+        Intent intent = this.getIntent();
+        String provName = intent.getStringExtra("provName");
+        changeEngineAndChejia(ChepaiShortName.getShortName(provName));
 
         // 显示隐藏行驶证图示
         popXSZ = (View) findViewById(R.id.popXSZ);
@@ -197,10 +213,46 @@ public class MainActivity extends BaseActivity {
 
         switch (requestCode) {
         case 0:
+            // 用户切换车牌第一个字母时执行
             Bundle bundle = data.getExtras();
-            String ShortName = bundle.getString("short_name");
-            short_name.setText(ShortName);
+            String shortName = bundle.getString("short_name");
+            changeEngineAndChejia(ChepaiShortName.getShortNameByName(shortName));
             break;
+        }
+    }
+    
+    /**
+     * 改变表单（发动机和车架的显示）
+     * 
+     * @param shortName
+     */
+    private void changeEngineAndChejia(ShortName shortName) {
+        if (shortName != null) {
+            short_name.setText(shortName.getName());
+        } else {
+            short_name.setText(defaultChepai);
+        }
+        
+        if (shortName.isNeedEngine()) {
+            if (shortName.isShortEngine()) {
+                engine_number.setHint(R.string.csy_short_engine_tip);
+            } else {
+                engine_number.setHint(R.string.csy_engine_tip);
+            }
+            row_engine.setVisibility(View.VISIBLE);
+        } else {
+            row_engine.setVisibility(View.GONE);
+        }
+        
+        if (shortName.isNeedchejia()) {
+            if (shortName.isShortchejia()) {
+                chejia_number.setHint(R.string.csy_short_chejia_tip);
+            } else {
+                chejia_number.setHint(R.string.csy_chejia_tip);
+            }
+            row_chejia.setVisibility(View.VISIBLE);
+        } else {
+            row_chejia.setVisibility(View.GONE);
         }
     }
 
@@ -222,18 +274,55 @@ public class MainActivity extends BaseActivity {
             return false;
         }
         
-        // TODO 发动机
-        if (car.getEngineNo().equals("")) {
-            Toast.makeText(MainActivity.this, "输入发动机好不为空", Toast.LENGTH_SHORT).show();
+        // 获取车辆信息情况
+        ShortName shortName = ChepaiShortName.getShortNameByName(car.getShortName());
+        if (shortName == null) {
             return false;
         }
         
-        if (car.getEngineNo().length() < 6) {
-            Toast.makeText(MainActivity.this, "请输入发动机号后6位", Toast.LENGTH_SHORT).show();
-            return false;
+        // 发动机
+        if (shortName.isNeedEngine()) {
+            if (car.getEngineNo().equals("")) {
+                Toast.makeText(MainActivity.this, "输入发动机号不为空", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            if (shortName.isShortEngine()) {
+                if (car.getEngineNo().length() < 6) {
+                    Toast.makeText(MainActivity.this, "请输入发动机号后6位", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            } else {
+                if (car.getEngineNo().length() < 6) {
+                    Toast.makeText(MainActivity.this, "请输入完整发动机号", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            }
         }
         
-        // TODO 车架校验
+        //  车架校验
+        if (shortName.isNeedchejia()) {
+            if (car.getChejiaNo().equals("")) {
+                Toast.makeText(MainActivity.this, "输入车架号不为空", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            
+            if (shortName.isShortchejia()) {
+                if (car.getChejiaNo().length() < 5) {
+                    Toast.makeText(MainActivity.this, "请输入车架号后5位", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            } else {
+                if (car.getChejiaNo().length() < 5) {
+                    Toast.makeText(MainActivity.this, "请输入完整车架号", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            }
+            if (car.getChejiaNo().length() < 5) {
+                Toast.makeText(MainActivity.this, "请输入完整车架号", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
         
         return true;
     }

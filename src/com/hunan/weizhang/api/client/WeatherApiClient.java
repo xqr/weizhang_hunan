@@ -47,7 +47,12 @@ public class WeatherApiClient {
                     return null;
                 }
                 WeatherInfo weather = new WeatherInfo();
-                weather.setAqi(Integer.parseInt(jsonNodes.get("aqi").getTextValue()));
+                try {
+                    // 部分城市接口返回null
+                    weather.setAqi(Integer.parseInt(jsonNodes.get("aqi").getTextValue()));
+                } catch (Exception e) {
+                    // 忽略异常
+                }
                 weather.setCurTemp(jsonNodes.get("curTemp").getTextValue());
                 weather.setHightemp(jsonNodes.get("hightemp").getTextValue());
                 weather.setLowtemp(jsonNodes.get("lowtemp").getTextValue());

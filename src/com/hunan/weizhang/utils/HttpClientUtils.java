@@ -1,9 +1,15 @@
 package com.hunan.weizhang.utils;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -102,6 +108,37 @@ public class HttpClientUtils {
 
         } catch (Exception e) {
             // TODO 
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    /**
+     * get请求
+     * 
+     * @param url 请求url
+     * @return
+     */
+    public static String getHttpsResponse(String url, Map<String, String> headerMap) {
+        try {
+            URL getUrl = new URL(url);
+            URLConnection urlConnection = getUrl.openConnection();
+            if (headerMap != null) {
+                for (String key : headerMap.keySet()) {
+                    urlConnection.addRequestProperty(key, headerMap.get(key));
+                }
+            }
+            
+            InputStream in = urlConnection.getInputStream();
+            
+            ByteArrayOutputStream result = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = in.read(buffer)) != -1) {
+                result.write(buffer, 0, length);
+            }
+            return result.toString();
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;

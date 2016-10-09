@@ -3,8 +3,10 @@ package com.hunan.weizhang.service.factory;
 import com.hunan.weizhang.model.CarInfo;
 import com.hunan.weizhang.service.WeizhangHistoryService;
 import com.hunan.weizhang.service.WeizhangService;
+import com.hunan.weizhang.service.weizhang.BeijingWeizhangService;
 import com.hunan.weizhang.service.weizhang.HubeiWeizhangService;
 import com.hunan.weizhang.service.weizhang.HunanWeizhangService;
+import com.hunan.weizhang.service.weizhang.QuanguoWeizhangService;
 import com.hunan.weizhang.service.weizhang.ShanghaiWeizhangService;
 
 public class WeizhangServiceFactory {
@@ -27,8 +29,10 @@ public class WeizhangServiceFactory {
             return new ShanghaiWeizhangService(weizhangHistoryService);
         case "鄂":
             return new HubeiWeizhangService(weizhangHistoryService);
+        case "京":
+            return new BeijingWeizhangService(weizhangHistoryService);
         default:
-            return new HubeiWeizhangService(weizhangHistoryService);
+            return new QuanguoWeizhangService(weizhangHistoryService);
         }
     }
 }
