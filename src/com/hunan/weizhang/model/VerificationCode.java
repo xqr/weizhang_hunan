@@ -12,6 +12,10 @@ public class VerificationCode implements Serializable {
      * 验证码图片
      */
     private String tpyzm;
+    /**
+     * 验证码图片字节数组
+     */
+    private byte[] tpyzmByte;
     
     /**
      * token
@@ -45,5 +49,13 @@ public class VerificationCode implements Serializable {
 
     public void setRandCode(String randCode) {
         this.randCode = randCode;
+    }
+
+    public byte[] getTpyzmByte() {
+        return tpyzmByte;
+    }
+
+    public void setTpyzmByte(byte[] tpyzmByte) {
+        this.tpyzmByte = tpyzmByte;
     }
 }

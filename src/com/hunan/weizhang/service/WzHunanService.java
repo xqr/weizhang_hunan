@@ -20,9 +20,10 @@ public class WzHunanService {
         }
         
         Map<String, String> data = new HashMap<String, String>();
-        data.put("CarNumber", car.getChepaiNo());
-        data.put("EngineNumber", car.getEngineNo());
-        data.put("phone", telephone);
+        data.put("carno", car.getChepaiNo());
+        data.put("engineno", car.getEngineNo());
+        data.put("classno", car.getChejiaNo());
+        data.put("mobile", telephone);
         
         StringWriter str=new StringWriter();
         ObjectMapper mapper = new ObjectMapper();
@@ -36,7 +37,7 @@ public class WzHunanService {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("data", Base64.encodeToString(str.toString().getBytes(), Base64.NO_WRAP));
         
-        return HttpClientUtils.postResponse("http://wz.cs.cn/hunan/api", params, null);
+        return HttpClientUtils.postResponse("http://www.sprzny.com/api/idcard", params, null);
     }
     
     /**

@@ -131,9 +131,11 @@ public class NearActivity extends BaseActivity {
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
             
-            if (mNearDataList ==null) {
+            if (mNearDataList ==null 
+                    || mNearDataList.size() == 0) {
                 return;
             }
+            
             if (mNearListAdapter == null) {
                 mNearListAdapter = new NearListAdapter(NearActivity.this, mNearDataList);
             }

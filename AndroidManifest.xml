@@ -15,38 +15,38 @@
         android:theme="@android:style/Theme.NoTitleBar" >
         <activity
             android:name="com.hunan.weizhang.activity.SplashActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/app_name" >
-            <intent-filter>
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+            <!--  intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
-        <activity 
-            android:name="com.hunan.weizhang.activity.ShortNameList" 
-            android:screenOrientation="portrait">
+        <activity
+            android:name="com.hunan.weizhang.activity.ShortNameList"
+            android:screenOrientation="portrait" >
         </activity>
         <activity android:name="com.hunan.weizhang.activity.ProvinceList" >
         </activity>
-        <activity 
-            android:name="com.hunan.weizhang.activity.WeizhangResult" 
-            android:screenOrientation="portrait">
+        <activity
+            android:name="com.hunan.weizhang.activity.WeizhangResult"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.hunan.weizhang.activity.MainActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.hunan.weizhang.activity.IndexActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_index" >
+            android:label="@string/title_activity_index"
+            android:screenOrientation="portrait" >
         </activity>
 
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="579c655c67e58e934f0017e2" >
+            android:value="581990db8f4a9d2028002abf" >
         </meta-data>
         <meta-data
             android:name="UMENG_CHANNEL"
@@ -62,9 +62,17 @@
 
         <activity
             android:name="com.hunan.weizhang.activity.NearActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_near" >
-        </activity>  
+            android:label="@string/title_activity_near"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.hunan.weizhang.activity.FreshActivity"
+            android:label="@string/title_activity_fresh" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
     <!-- 这个权限用于进行网络定位 -->

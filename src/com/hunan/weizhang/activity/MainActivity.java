@@ -4,7 +4,6 @@ import java.util.Locale;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,12 +19,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sprzny.quanguo.R;
-import com.hunan.weizhang.api.client.weizhang.HunanWeizhangApiClient;
 import com.hunan.weizhang.model.CarInfo;
 import com.hunan.weizhang.model.ChepaiShortName;
 import com.hunan.weizhang.model.ShortName;
 import com.hunan.weizhang.model.VerificationCode;
-import com.hunan.weizhang.qrcode.QrCodeExample;
 import com.hunan.weizhang.service.AllCapTransformationMethod;
 
 public class MainActivity extends BaseActivity {
@@ -175,35 +172,7 @@ public class MainActivity extends BaseActivity {
         // 显示隐藏行驶证图示
         popXSZ = (View) findViewById(R.id.popXSZ);
         popXSZ.setOnTouchListener(new popOnTouchListener());
-        hideShowXSZ();
-        
-//        //获取验证码
-//        new GetVerificationCodeTask().execute();
-    }
-    
-    /**
-     * 获取验证码
-     */
-    public class GetVerificationCodeTask extends AsyncTask<Void, Void, Boolean> {
-        
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            int i = 1;
-            do {
-                verificationCode = HunanWeizhangApiClient.getVerifCodeAction();
-                if (verificationCode != null) {
-                    String result = QrCodeExample.qrCode(verificationCode.getTpyzm());
-                    if (result == null || result.length() != 4) {
-                        verificationCode = null;
-                    } else {
-                        verificationCode.setRandCode(result);
-                    }
-                }
-                i++;
-            } while(verificationCode == null && i  <= 3);
-            
-            return true;
-        }
+        hideShowXSZ();   
     }
     
     @Override
@@ -317,10 +286,6 @@ public class MainActivity extends BaseActivity {
                     Toast.makeText(MainActivity.this, "请输入完整车架号", Toast.LENGTH_SHORT).show();
                     return false;
                 }
-            }
-            if (car.getChejiaNo().length() < 5) {
-                Toast.makeText(MainActivity.this, "请输入完整车架号", Toast.LENGTH_SHORT).show();
-                return false;
             }
         }
         

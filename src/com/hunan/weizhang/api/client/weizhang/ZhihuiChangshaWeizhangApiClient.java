@@ -78,7 +78,7 @@ private static List<ZhihuiChangshaWeizhangYParams> userList = new ArrayList<>();
         // 发动机后5位
         String engineNo = car.getEngineNo();
         if (engineNo.length() > 5) {
-            engineNo.substring(engineNo.length() - 5, engineNo.length());
+            engineNo = engineNo.substring(engineNo.length() - 5, engineNo.length());
         }
         paramsMap.put("fdjhm", engineNo);
         // 车牌不带第一个字母

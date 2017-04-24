@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -70,6 +71,7 @@ public class HttpClientUtils {
         }
         return null;
     }
+
     
     /**
      * get请求
@@ -78,6 +80,30 @@ public class HttpClientUtils {
      * @return
      */
     public static String getResponse(String url, Map<String, String> headerMap) {
+        try {
+            HttpResponse response = getHttpResponse(url, headerMap);
+            if (response == null 
+                    || response.getStatusLine().getStatusCode() != 200) {
+                return null;
+            }
+            HttpEntity entity = response.getEntity();
+            String htmlStr = null;
+            if (entity != null) {
+                entity = new BufferedHttpEntity(entity);
+                htmlStr = EntityUtils.toString(entity, "UTF-8");
+                entity.consumeContent();
+            }
+            
+            return htmlStr;
+
+        } catch (Exception e) {
+            // TODO 
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public static HttpResponse getHttpResponse(String url, Map<String, String> headerMap) {
         try {
             HttpClient httpclient = new DefaultHttpClient();
             URI uri = new URI(url);
@@ -96,16 +122,33 @@ public class HttpClientUtils {
                     || response.getStatusLine().getStatusCode() != 200) {
                 return null;
             }
-            HttpEntity entity = response.getEntity();
-            String htmlStr = null;
-            if (entity != null) {
-                entity = new BufferedHttpEntity(entity);
-                htmlStr = EntityUtils.toString(entity, "UTF-8");
-                entity.consumeContent();
+            return response;
+            
+        } catch (Exception e) {
+            // TODO 
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public static String getResponseCookie(String url, Map<String, String> headerMap) {
+        try {
+            HttpResponse response = getHttpResponse(url, headerMap);
+            if (response == null 
+                    || response.getStatusLine().getStatusCode() != 200) {
+                return null;
             }
             
-            return htmlStr;
-
+            Header[] headers = response.getHeaders("Set-Cookie");
+            String result = "";
+            for (Header header : headers) {
+                String value = header.getValue();
+                result = result + value.split(";")[0] +";";
+            }
+            if (result.endsWith(";")) {
+                result = result.substring(0, result.length() - 1);
+            }
+            return result;
         } catch (Exception e) {
             // TODO 
             e.printStackTrace();

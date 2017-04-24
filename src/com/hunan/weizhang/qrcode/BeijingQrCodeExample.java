@@ -1,0 +1,51 @@
+package com.hunan.weizhang.qrcode;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class BeijingQrCodeExample {
+    private static Map<String, String> codeExampleMap = null;
+    
+    /**
+     * 解析验证码
+     * 
+     * @param imageData
+     * @return
+     */
+    public static String qrCode(byte[] imageData) {
+        init();
+        if (codeExampleMap == null) {
+            return null;
+        }
+        // 图片二值化
+        int[][] erzhiArray = BejingImageReduce.getImageGRB(imageData);
+        // 图片去除噪点
+        int[][] jiangzaoErzhiArray = BejingImageReduce.reduceZao(erzhiArray);
+        return BejingImageReduce.cuttingImage(codeExampleMap, jiangzaoErzhiArray);
+    }
+    
+    /**
+     * 初始化
+     * 
+     * @param is
+     */
+    public static Map<String, String> init() {
+        if (codeExampleMap != null) {
+            return codeExampleMap;
+        }
+        
+        codeExampleMap = new HashMap<String, String>();
+        codeExampleMap.put("000111000011111110011000110110000011110000011110000011110000011110000011110000011110000011011000110011111110000111000", "0");
+        codeExampleMap.put("00111000111110001111100000011000000110000001100000011000000110000001100000011000000110001111111111111111", "1");
+        codeExampleMap.put("01111100111111101000001100000011000000110000011000001100000110000011000001100000110000001111111111111111", "2");
+        codeExampleMap.put("01111100111111111000001100000011000001100111110001111110000001110000001100000011100001111111111001111100", "3");
+        codeExampleMap.put("000001100000011100000011100000111100001101100001101100011001100011001100111111111111111111000001100000001100000001100", "4");
+        codeExampleMap.put("11111111111111111100000011000000110000001111100011111110000001110000001100000011100001111111111001111100", "5");
+        codeExampleMap.put("000111100001111110011000010011000000110000000110111100111111110111000111110000011110000011011000111011111110000111100", "6");
+        codeExampleMap.put("11111111111111110000001100000010000001100000110000001000000110000001000000110000001100000110000001100000", "7");
+        codeExampleMap.put("001111100011111110011000110011000110011100100001111100001111100011001110110000011110000011111000111011111110001111100", "8");
+        codeExampleMap.put("001111000011111110111000110110000011110000011111000111011111111001111011000000011000000110010000110011111100001111000", "9");
+        
+        return codeExampleMap;
+    }
+}

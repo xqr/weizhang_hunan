@@ -23,8 +23,8 @@ public class QrCodeExample {
         // 图片二值化
         int[][] erzhiArray = ImageReduce.getImageGRB(imageData);
         // 图片去除噪点
-        int[][] jiangzaoErzhiArray = ImageReduce.reduceZao(erzhiArray);
-        return ImageReduce.cuttingImage(codeExampleMap, jiangzaoErzhiArray);
+        int[][] jiangzaoErzhiArray = BejingImageReduce.reduceZao(erzhiArray);
+        return BejingImageReduce.cuttingImage(codeExampleMap, jiangzaoErzhiArray);
     }
     
     /**
