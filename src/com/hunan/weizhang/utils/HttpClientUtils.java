@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.GZIPInputStream;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -18,6 +20,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.protocol.HTTP;
+import org.apache.http.util.ByteArrayBuffer;
 import org.apache.http.util.EntityUtils;
 
 public class HttpClientUtils {
@@ -84,17 +87,32 @@ public class HttpClientUtils {
                     httpGet.setHeader(key, headerMap.get(key));
                 }
             }
-            
             HttpResponse response = httpclient.execute(httpGet);
             if (response == null) {
                 return null;
             }
+            
             HttpEntity entity = response.getEntity();
             String htmlStr = null;
             if (entity != null) {
+                if (response.containsHeader("Content-Encoding") 
+                        && response.getHeaders("Content-Encoding")[0].getValue().contains("gzip")) {
+                  //以下是解压缩的过程  
+                    GZIPInputStream gis = new GZIPInputStream(entity.getContent());  
+                    ByteArrayBuffer bt= new ByteArrayBuffer(4096);  
+                    int l;  
+                    byte[] tmp = new byte[4096];  
+                    while ((l=gis.read(tmp))!=-1){  
+                        bt.append(tmp, 0, l);  
+                    }  
+                      
+                    htmlStr = new String(bt.toByteArray(),"utf-8");  
+                    
+                } else {
                 entity = new BufferedHttpEntity(entity);
                 htmlStr = EntityUtils.toString(entity, "UTF-8");
                 entity.consumeContent();
+                }
             }
             
             return htmlStr;

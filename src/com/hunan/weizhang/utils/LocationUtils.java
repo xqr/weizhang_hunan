@@ -86,7 +86,6 @@ public class LocationUtils {
         
         @Override
         public void onReceiveLocation(BDLocation location) {
-            System.out.println(location.getLocType());
             if (location.getLocType() == BDLocation.TypeGpsLocation
                     || location.getLocType() == BDLocation.TypeNetWorkLocation
                     || location.getLocType() == BDLocation.TypeOffLineLocation) {

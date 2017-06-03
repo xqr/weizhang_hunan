@@ -24,7 +24,7 @@ public class OilPriceApiClient {
     public static OilPriceInfo SearchOilPrice(String prov) {
         
         try {
-            String url = "http://wz.cs.cn/hunan/youjia/" + URLEncoder.encode(prov, "UTF-8");
+            String url = "http://www.sprzny.com/hunan/youjia/" + URLEncoder.encode(prov, "UTF-8");
             
             Map<String, String> headerMap = new HashMap<String, String>();
 //            headerMap.put("apiKey", apiKey);

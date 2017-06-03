@@ -100,17 +100,21 @@ public class IndexActivity extends BaseActivity implements LocationHelper {
                 || latLng == null
                 || provName == null 
                 || provName.length() == 0) {
+            // 先展示默认城市，待定位成功后更新
+            showCityWeatherAndOilPrice(defaultCityName, provName);
+            
             mLocationUtils = new LocationUtils(this);
             mLocationUtils.initLocationListener(this);
         } else {
             showCityWeatherAndOilPrice(cityName, provName);
         }
-//        
-//        // 初始化验证码
+////        
+////        // 初始化验证码
 //        try {
 //            AssetManager am=getAssets();
-//            InputStream is=am.open("hunancode.txt");
-//            QrCodeExample.init(is);
+//            InputStream is=am.open("city.xml");
+//            WeatherApiClient.init(is);
+////            QrCodeExample.init(is);
 //            am.close();
 //        } catch (IOException e) {
 //            
