@@ -12,6 +12,30 @@ public class OilPriceInfo {
     private String ct;
     private String p93;
     
+    // 不展示
+    private String p92;
+    private String p89;
+    private String p95;
+    
+    public String getP92() {
+        return p92;
+    }
+    public void setP92(String p92) {
+        this.p92 = p92;
+    }
+    public String getP89() {
+        return p89;
+    }
+    public void setP89(String p89) {
+        this.p89 = p89;
+    }
+    public String getP95() {
+        return p95;
+    }
+    public void setP95(String p95) {
+        this.p95 = p95;
+    }
+    
     public String getP90() {
         return p90;
     }

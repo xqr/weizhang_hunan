@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import android.text.TextUtils;
@@ -21,10 +23,9 @@ public class ShanghaiWeizhangApiClient {
      * @return
      */
     public static WeizhangMessage toQueryVioltionByCarAction(CarInfo car) {
-        String engineNo = car.getEngineNo();
-
-        String url = String.format("http://my.eshimin.com/weizhang/electronbill/detail?account=%s&wzStatus=0&fdjh=%s",
-                car.getChepaiNo(), engineNo);
+        String url = String.format("http://my.eshimin.com/weizhang/electronbill/detail?account=%s&wzStatus=0&fdjh=%s&clbj=0&hpzl=%s&_=%s",
+                car.getChepaiNo(), car.getEngineNo(), car.getHaopaiType(), new Date().getTime());
+        
         try {
             String content = HttpClientUtils.getResponse(url, null);
             if (TextUtils.isEmpty(content)) {
@@ -50,10 +51,18 @@ public class ShanghaiWeizhangApiClient {
                         
                         // 违章细节详情对象封装
                         weizhangInfo.setFkje(node.get("fkje").getTextValue()); // 罚款金额
-                        Date date = new SimpleDateFormat("yyyyMMddHHmm").parse(node.get("wfsj").getTextValue());
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                        weizhangInfo.setWfsj(sdf.format(date)); // 违法时间
-                        weizhangInfo.setWfxw(node.get("xwsm").getTextValue()); // 违法行为
+                        try {
+                            Date date = new SimpleDateFormat("yyyyMMddHHmm", Locale.CHINA).parse(node.get("wfsj").getTextValue());
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
+                            weizhangInfo.setWfsj(sdf.format(date)); // 违法时间
+                        } catch (Exception e) {
+                            weizhangInfo.setWfsj(node.get("wfsj").getTextValue());
+                        }
+                        if (node.get("xwsm") != null) {
+                            weizhangInfo.setWfxw(node.get("xwsm").getTextValue()); // 违法行为
+                        } else {
+                            weizhangInfo.setWfxw("");
+                        }
                         weizhangInfo.setWfdz(node.get("wfdz").getTextValue()); // 违法地址
                         weizhangInfo.setWfjfs(String.valueOf(node.get("kfsm").getIntValue())); // 扣分
                         weizhangInfo.setZt("0"); // 处理状态

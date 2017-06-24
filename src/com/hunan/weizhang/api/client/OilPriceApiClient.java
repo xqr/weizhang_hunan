@@ -12,9 +12,6 @@ import com.hunan.weizhang.model.OilPriceInfo;
 import com.hunan.weizhang.utils.HttpClientUtils;
 
 public class OilPriceApiClient {
-    
-//    private static String apiKey = "e656c1cb433764b3fdc1df7310c64254";
-    
     /**
      * 查询油价
      * 
@@ -24,10 +21,9 @@ public class OilPriceApiClient {
     public static OilPriceInfo SearchOilPrice(String prov) {
         
         try {
-            String url = "http://wz.cs.cn/hunan/youjia/" + URLEncoder.encode(prov, "UTF-8");
+            String url = "http://www.sprzny.com/hunan/youjia/" + URLEncoder.encode(prov, "UTF-8");
             
             Map<String, String> headerMap = new HashMap<String, String>();
-//            headerMap.put("apiKey", apiKey);
             
             String content = HttpClientUtils.getResponse(url, headerMap);
             if (content == null || TextUtils.isEmpty(content)) {

@@ -107,6 +107,8 @@ public class IndexActivity extends BaseActivity implements LocationHelper {
                 || latLng == null
                 || provName == null 
                 || provName.length() == 0) {
+            // 先展示默认城市，待定位成功后更新
+            showCityWeatherAndOilPrice(defaultCityName, provName);
             // 初始化城市定位
             mLocationUtils = new LocationUtils(this);
             mLocationUtils.initLocationListener(this);
