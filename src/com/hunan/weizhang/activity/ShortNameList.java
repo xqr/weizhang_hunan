@@ -25,7 +25,7 @@ public class ShortNameList extends Activity {
 //        final String short_name = bundle.getString("select_short_name");
             
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.csy_activity_shortname);
         
         //标题

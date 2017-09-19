@@ -1,19 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sprzny.shanghai"
-    android:versionCode="9"
-    android:versionName="2.2" >
+    android:versionCode="10"
+    android:versionName="2.3" >
 
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="21" />
 
+    <!-- 这个权限用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" >
+    </uses-permission>
+    <!-- 这个权限用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" >
+    </uses-permission>
+    <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" >
+    </uses-permission>
+    <!-- 用于读取手机当前的状态 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" >
+    </uses-permission>
+    <!-- 写入扩展存储，向扩展卡写入数据，用于写入离线定位数据 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" >
+    </uses-permission>
+    <!-- SD卡读取权限，用户写入离线定位数据 -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" >
+    </uses-permission>
+    
     <application
         android:name="com.hunan.weizhang.app.AppApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.NoTitleBar" >
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
         <activity
             android:name="com.hunan.weizhang.activity.SplashActivity"
             android:screenOrientation="portrait"
@@ -52,13 +75,14 @@
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="baidu" />
+        
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="fZ16iOV2wxdC1CKYMNGEjzReDHDyWfdl" />
-
-        <service
-            android:name="com.baidu.location.f"
-            android:enabled="true" >
+            android:value="aKiqnpeF1DmqLoD0RuwmVFxb2w4HopRq" />
+        
+        <service android:name="com.baidu.location.f" 
+            android:enabled="true" 
+            android:process=":remote">
         </service>
 
         <activity
@@ -67,28 +91,5 @@
             android:label="@string/title_activity_near" >
         </activity>
     </application>
-
-    <!-- 这个权限用于进行网络定位 -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" >
-    </uses-permission>
-    <!-- 这个权限用于访问GPS定位 -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" >
-    </uses-permission>
-    <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" >
-    </uses-permission>
-    <!-- 用于读取手机当前的状态 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" >
-    </uses-permission>
-    <!-- 写入扩展存储，向扩展卡写入数据，用于写入离线定位数据 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" >
-    </uses-permission>
-    <!-- SD卡读取权限，用户写入离线定位数据 -->
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" >
-    </uses-permission>
-
+    
 </manifest>

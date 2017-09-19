@@ -38,7 +38,7 @@ public class WeizhangResult extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         // 循环添加列表项来显示 自定义adapter
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.csy_activity_result);
 
         // 标题

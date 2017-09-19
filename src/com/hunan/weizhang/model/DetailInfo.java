@@ -2,9 +2,15 @@ package com.hunan.weizhang.model;
 
 import java.io.Serializable;
 
-public class DetailInfo {
+public class DetailInfo implements Serializable {
+    
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private int distance;
     private String tag;
+    private LatLng navi_location;
     private String type;
     private String detail_url;
     private String overall_rating;
@@ -72,5 +78,12 @@ public class DetailInfo {
     }
     public void setPrice(String price) {
         this.price = price;
+    }
+    
+    public LatLng getNavi_location() {
+        return navi_location;
+    }
+    public void setNavi_location(LatLng navi_location) {
+        this.navi_location = navi_location;
     }
 }

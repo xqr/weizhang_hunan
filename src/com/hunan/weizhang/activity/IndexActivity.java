@@ -22,9 +22,18 @@ import com.hunan.weizhang.utils.LocationHelper;
 import com.hunan.weizhang.utils.LocationUtils;
 import com.hunan.weizhang.utils.NetUtil;
 import com.sprzny.shanghai.R;
+
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
@@ -102,7 +111,6 @@ public class IndexActivity extends BaseActivity implements LocationHelper {
                 || provName.length() == 0) {
             // 先展示默认城市，待定位成功后更新
             showCityWeatherAndOilPrice(defaultCityName, provName);
-            
             mLocationUtils = new LocationUtils(this);
             mLocationUtils.initLocationListener(this);
         } else {
@@ -364,7 +372,10 @@ public class IndexActivity extends BaseActivity implements LocationHelper {
             String city = location.getCity();
             latLng = new LatLng(location.getLatitude(), location.getLongitude());
             if (city == null || city.isEmpty()) {
-                showCityWeatherAndOilPrice(defaultCityName, provName);
+                Message msg = mHandler.obtainMessage();  
+                msg.what = 1;  
+                msg.sendToTarget(); 
+//                showCityWeatherAndOilPrice(defaultCityName, provName);
                 return;
             }
             
@@ -385,9 +396,23 @@ public class IndexActivity extends BaseActivity implements LocationHelper {
             if (latLng != null) {
                 mLocationUtils.removeLocationListener();
             }
-            showCityWeatherAndOilPrice(cityName, provName);
+            Message msg = mHandler.obtainMessage();  
+            msg.what = 1;  
+            msg.sendToTarget(); 
+//            showCityWeatherAndOilPrice(cityName, provName);
         }
     }
+    
+    Handler mHandler = new Handler() {  
+        @Override  
+        public void handleMessage(Message msg) {  
+            if(msg.what == 1) {  
+               showCityWeatherAndOilPrice(cityName, provName);
+            }  
+            super.handleMessage(msg);  
+        }  
+    };  
+    
     
     /**
      * 定位成功后，显示与定位相关信息
