@@ -28,6 +28,8 @@ import com.sprzny.quanguo.R;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
@@ -373,7 +375,10 @@ public class IndexActivity extends BaseActivity implements LocationHelper {
             String city = location.getCity();
             latLng = new LatLng(location.getLatitude(), location.getLongitude());
             if (city == null || city.isEmpty()) {
-                showCityWeatherAndOilPrice(defaultCityName, provName);
+                Message msg = mHandler.obtainMessage();  
+                msg.what = 1;  
+                msg.sendToTarget(); 
+//                showCityWeatherAndOilPrice(defaultCityName, provName);
                 return;
             }
             
@@ -394,9 +399,22 @@ public class IndexActivity extends BaseActivity implements LocationHelper {
             if (latLng != null) {
                 mLocationUtils.removeLocationListener();
             }
-            showCityWeatherAndOilPrice(cityName, provName);
+            Message msg = mHandler.obtainMessage();  
+            msg.what = 1;  
+            msg.sendToTarget(); 
+//            showCityWeatherAndOilPrice(cityName, provName);
         }
     }
+    
+    Handler mHandler = new Handler() {  
+        @Override  
+        public void handleMessage(Message msg) {  
+            if(msg.what == 1) {  
+               showCityWeatherAndOilPrice(cityName, provName);
+            }  
+            super.handleMessage(msg);  
+        }  
+    };
     
     /**
      * 定位成功后，显示与定位相关信息

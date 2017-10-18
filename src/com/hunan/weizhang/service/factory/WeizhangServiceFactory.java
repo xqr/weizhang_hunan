@@ -27,10 +27,10 @@ public class WeizhangServiceFactory {
             return new HunanWeizhangService(weizhangHistoryService);
         case "沪":
             return new ShanghaiWeizhangService(weizhangHistoryService);
-        case "鄂":
-            return new HubeiWeizhangService(weizhangHistoryService);
-        case "京":
-            return new BeijingWeizhangService(weizhangHistoryService);
+//        case "鄂":
+//            return new HubeiWeizhangService(weizhangHistoryService);
+//        case "京":
+//            return new BeijingWeizhangService(weizhangHistoryService);
         default:
             return new QuanguoWeizhangService(weizhangHistoryService);
         }

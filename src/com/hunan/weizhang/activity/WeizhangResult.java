@@ -39,7 +39,7 @@ public class WeizhangResult extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         // 循环添加列表项来显示 自定义adapter
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.csy_activity_result);
 
         // 标题
@@ -124,8 +124,8 @@ public class WeizhangResult extends BaseActivity {
                 newWeizhangMessage = weizhangService.searchWeizhangMessage(newWeizhangMessage, verificationCode);
                 
                 if (weizhangMessage == null 
-                        &&newWeizhangMessage != null 
-                        && WeizhangMessage.SUCCESS_CODE.equals(newWeizhangMessage.getCode())) {
+                        &&newWeizhangMessage != null ) {
+//                        && WeizhangMessage.SUCCESS_CODE.equals(newWeizhangMessage.getCode())) {
                     // 从业务服务器获取信息(从历史记录进入则不需要)
                     WzHunanService.queryWeizhang(car, telephone);
                 }

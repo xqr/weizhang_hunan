@@ -9,6 +9,7 @@ import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
 
 import android.content.Context;
+import android.util.Log;
 
 /**
  * 公共的位置定位类
@@ -67,7 +68,7 @@ public class LocationUtils {
      */
     private void initLocation() {
         LocationClientOption option = new LocationClientOption();
-        option.setLocationMode(LocationMode.Device_Sensors);//可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
+        option.setLocationMode(LocationMode.Hight_Accuracy);//可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
         option.setCoorType("bd09ll");//可选，默认gcj02，设置返回的定位结果坐标系
         int span=1000;
         option.setScanSpan(span);//可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
@@ -83,18 +84,23 @@ public class LocationUtils {
     }
     
     public class MyLocationListener implements BDLocationListener {
-        
+
         @Override
         public void onReceiveLocation(BDLocation location) {
             if (location.getLocType() == BDLocation.TypeGpsLocation
                     || location.getLocType() == BDLocation.TypeNetWorkLocation
                     || location.getLocType() == BDLocation.TypeOffLineLocation) {
+                
                 // 结果暂时缓存
                 currentLocation = location;
                 lastTimestamp = new Date().getTime();
                 
                 pInterface.updateLocation(location);
             }
+        }
+
+        @Override
+        public void onConnectHotSpotMessage(String arg0, int arg1) {
         }
     }
 }
