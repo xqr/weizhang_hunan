@@ -11,8 +11,6 @@ public class OilPriceInfo {
     private String p97;
     private String ct;
     private String p93;
-    
-    // 不展示
     private String p92;
     private String p89;
     private String p95;
@@ -84,10 +82,10 @@ public class OilPriceInfo {
         for (String name : provList) {
             if (name.equals(prov)) {
                 return String.format("<font color='#0099FF'>89#</font> %s <font color='#EBEBEB'>|</font> <font color='#FF0000'>92#</font> %s <font color='#EBEBEB'>|</font>  <font color='#008000'>95#</font> %s <font color='#EBEBEB'>|</font> <font color='#999999'>0#</font> %s ", 
-                        p90.split("\\(")[0], p93.split("\\(")[0], p97.split("\\(")[0], p0);
+                        p90.split("\\(")[0], p92, p95, p0);
             }
         }
-        return String.format("<font color='#0099FF'>90#</font> %s <font color='#EBEBEB'>|</font> <font color='#FF0000'>93#</font> %s <font color='#EBEBEB'>|</font>  <font color='#008000'>97#</font> %s <font color='#EBEBEB'>|</font> <font color='#999999'>0#</font> %s ", 
-                p90, p93, p97, p0);
+        return String.format("<font color='#0099FF'>90#</font> %s <font color='#EBEBEB'>|</font> <font color='#FF0000'>92#</font> %s <font color='#EBEBEB'>|</font>  <font color='#008000'>95#</font> %s <font color='#EBEBEB'>|</font> <font color='#999999'>0#</font> %s ", 
+                p90, p92, p95, p0);
     }
 }
